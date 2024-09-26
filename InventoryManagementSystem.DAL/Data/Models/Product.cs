@@ -21,7 +21,11 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public int CategoryId { get; set; }
         public Category category { get; set; }
 
+        public int? MinimumStockToRequest { get; set; }
+        public int? DiscountPrecentage { get; set; }
+
         public ICollection<CartProduct> CartProducts { get; set; }
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public ICollection<ProductVariant> productVariants { get; set; }
     }
 }

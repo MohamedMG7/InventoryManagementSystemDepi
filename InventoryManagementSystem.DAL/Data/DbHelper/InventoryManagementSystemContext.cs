@@ -15,6 +15,12 @@ namespace InventoryManagementSystem.DAL.Data.DbHelper
 
 			modelBuilder.Entity<OrderProduct>()
 				.HasKey(sc => new { sc.OrderId, sc.ProductId });
+
+			modelBuilder.Entity<PurchaseProduct>()
+		   .HasOne(pp => pp.ProductVariant)      // Specify the relationship to ProductVariant
+		   .WithMany(pv => pv.purchaseProducts)  // Assuming ProductVariant has a navigation property to PurchaseProduct
+		   .HasForeignKey(pp => pp.ProductVariantId) // Specify the foreign key
+		   .OnDelete(DeleteBehavior.Restrict);
 		}
 
 		public DbSet<Product> Products { get; set; }
@@ -26,7 +32,8 @@ namespace InventoryManagementSystem.DAL.Data.DbHelper
 		public DbSet<Payment> Payments { get; set; }
 		public DbSet<CartProduct> cartProducts { get; set; }
 		public DbSet<OrderProduct> orderProducts { get; set; }
-
-
-	}
+        public DbSet<ProductVariant> productVariants { get; set; }
+		public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<PurchaseProduct> PurchaseProducts { get; set; }
+    }
 }
