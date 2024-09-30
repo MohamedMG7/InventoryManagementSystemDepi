@@ -10,8 +10,4 @@
     <ProjectReference Include="..\InventoryManagementSystem.DAL\InventoryManagementSystem.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\" />
-  </ItemGroup>
-
 </Project>
