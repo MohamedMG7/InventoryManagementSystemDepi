@@ -23,12 +23,12 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public IEnumerable<Product> GetAll()
 		{
-			return _context.Products.AsNoTracking().ToList();
+			return _context.Products.Include(p => p.company).Include(p => p.category).AsNoTracking().ToList();
 		}
 
 		public Product GetbyID(int id)
 		{
-			return _context.Products.Find(id);
+			return _context.Products.Include(p => p.company).Include(p => p.category).FirstOrDefault(p => p.ProductId == id);
 		}
 
 		public void SaveChanges()

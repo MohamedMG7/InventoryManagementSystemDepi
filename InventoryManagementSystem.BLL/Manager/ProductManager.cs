@@ -2,6 +2,8 @@
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.DAL.Reposatiries;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace InventoryManagementSystem.BLL.Manager
 {
 	public class ProductManager : IProductManager
@@ -37,24 +39,35 @@ namespace InventoryManagementSystem.BLL.Manager
 			_productRepo.SaveChanges();
 		}
 
-		public IEnumerable<Product> GetAll()
+		public IEnumerable<ProductReadDto> GetAll()
 		{
-			throw new NotImplementedException();
+			var productModel = _productRepo.GetAll();
+			var ProductDtoList = productModel.Select(x => new ProductReadDto(){ 
+				Name = x.Name,
+				Description = x.Description,
+				Price = x.Price,
+				ImageUrl = x.ImageUrl,
+				CompanyName = x.company.Name,
+				CategoryName = x.category.Name,
+			});
+			return ProductDtoList;
 		}
 
 		public ProductReadDto GetbyId(int id)
 		{
-			var ProductModel = _productRepo.GetbyID(id);
-			ProductReadDto product = new ProductReadDto { 
+            var ProductModel = _productRepo.GetbyID(id);
+			ProductReadDto productReadDto = new ProductReadDto { 
 				ProductId = ProductModel.ProductId,
 				Name = ProductModel.Name,
 				Description = ProductModel.Description,
 				Price = ProductModel.Price,
 				ImageUrl = ProductModel.ImageUrl,
-				CompanyName = ProductModel.CompanyName,
-				CategoryName = ProductModel.CategoryName,
+				CompanyName = ProductModel.company?.Name,
+				CategoryName = ProductModel.category?.Name,
+				MinimumStockToRequest = ProductModel.MinimumStockToRequest,
+				DiscountPrecentage= ProductModel.DiscountPrecentage
 			};
-
+			return productReadDto;
 		}
 
 		public void SaveChanges()
@@ -62,9 +75,15 @@ namespace InventoryManagementSystem.BLL.Manager
 			_productRepo.SaveChanges();
 		}
 
-		public void Update(Product product)
+		public void Update(ProductUpdateDto product)
 		{
-			throw new NotImplementedException();
+			var productUpdate = _productRepo.GetbyID(product.Id);
+			productUpdate.Name = product.Name;
+			productUpdate.Description = product.Description;
+			productUpdate.Price = product.Price;
+			productUpdate.ImageUrl = product.ImageUrl;
+			_productRepo.Update(productUpdate);
+			_productRepo.SaveChanges();
 		}
 	}
 }
