@@ -51,7 +51,6 @@ namespace InventoryManagementSystem.Controllers
         public ActionResult Add(ProductAddDto productAddDto) {
             _productManager.Add(productAddDto);
             return Ok(productAddDto);
-        
         }
     }
 }

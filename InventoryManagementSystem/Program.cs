@@ -3,7 +3,6 @@ using InventoryManagementSystem.DAL.Reposatiries;
 using Microsoft.EntityFrameworkCore;
 using InventoryManagementSystem.BLL.AutoMapper;
 using InventoryManagementSystem.BLL.Manager;
-using InventoryManagementSystem.BLL.Manager.UserManager;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -22,11 +21,9 @@ namespace InventoryManagementSystem
             builder.Services.AddAutoMapper(map => map.AddProfile(new MappingProfile()));
 			builder.Services.AddScoped<IProductRepo, ProductRepo>();
 			builder.Services.AddScoped<IProductManager, ProductManager>();
-            //builder.Services.AddScoped<IProductManager, ProductAutoMapperManager>();
-            builder.Services.AddScoped<IUserManager, UserManager>();
-            builder.Services.AddScoped<IUserRepo, UserRepo>();
+			builder.Services.AddScoped<IProductManager, ProductAutoMapperManager>();
 
-            builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
+			builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 			var app = builder.Build();
