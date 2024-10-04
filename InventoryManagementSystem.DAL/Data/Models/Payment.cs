@@ -13,7 +13,6 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public string PaymentType { get; set; }
         public string PaymentStatus { get; set; }
         public TimeOnly PaymentTime { get; set; }
-        //There Should be OrderId
         public int OrderId { get; set; }
         public Order order { get; set; }
     }
