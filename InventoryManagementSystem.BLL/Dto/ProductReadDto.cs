@@ -18,6 +18,6 @@ namespace InventoryManagementSystem.BLL.Dto
 		public int? DiscountPrecentage { get; set; }
 
 		// List of product variants
-		public ICollection<ProductVariantReadDto> ProductVariants { get; set; }
+		//public ICollection<ProductVariantReadDto> ProductVariants { get; set; } i do not need to read the variants here
 	}
 }
