@@ -15,5 +15,10 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public TimeOnly PaymentTime { get; set; }
         public int OrderId { get; set; }
         public Order order { get; set; }
+
+        public Payment()
+        {
+            PaymentTime = TimeOnly.FromDateTime(DateTime.Now); // Automatically set the current time
+        }
     }
 }

@@ -5,6 +5,7 @@ using InventoryManagementSystem.BLL.AutoMapper;
 using InventoryManagementSystem.BLL.Manager;
 using InventoryManagementSystem.BLL.Manager.UserManager;
 using InventoryManagementSystem.BLL.Manager.ShoppingCartManager;
+using InventoryManagementSystem.BLL.Manager.PaymentManager;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -29,6 +30,9 @@ namespace InventoryManagementSystem
 
             builder.Services.AddScoped<IShoppingCartManger, ShoppingCartManager>();
             builder.Services.AddScoped<IShoppingCartRepo, ShoppingCartRepo>();
+
+            builder.Services.AddScoped<IPaymentManager, PaymentManager>();
+            builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 
             builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
