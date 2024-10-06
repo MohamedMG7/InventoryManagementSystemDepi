@@ -5,7 +5,7 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 	public interface IPurchaseProductRepo
 	{
 		IEnumerable<PurchaseProduct> GetAll();
-		PurchaseProduct GetbyID(int id);
+		PurchaseProduct GetbyID(int PurchaseId,int ProductId);
 		void Delete(PurchaseProduct PurchaseProduct);
 		void Update(PurchaseProduct PurchaseProduct);
 		void Add(PurchaseProduct PurchaseProduct);

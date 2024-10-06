@@ -25,12 +25,12 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public IEnumerable<PurchaseProduct> GetAll()
 		{
-			return _context.PurchaseProducts.AsNoTracking().ToList();
+			return _context.PurchaseProducts.Include(op => op.ProductVariant).AsNoTracking().ToList();
 		}
 
-		public PurchaseProduct GetbyID(int id)
+		public PurchaseProduct GetbyID(int purchaseId, int productId)
 		{
-			return _context.PurchaseProducts.Find(id);
+			return _context.PurchaseProducts.Include(op => op.ProductVariant).FirstOrDefault(op => op.ProductVariantId == productId && op.PurchaseId == purchaseId);
 		}
 
 		public void SaveChanges()
