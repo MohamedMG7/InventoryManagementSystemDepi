@@ -43,5 +43,12 @@ namespace InventoryManagementSystem.Controllers
 			return Ok(orderAddDto);
 
 		}
+
+		//[HttpGet("with-products/{orderId}")]
+		//public ActionResult<ReadOrderWithProductsDto> GetOrderWithProductsData(int orderId)
+		//{
+		//		var orderWithProducts = _orderManager.GetOrderWithProductsData(orderId);
+		//		return Ok(orderWithProducts);
+		//}
 	}
 }

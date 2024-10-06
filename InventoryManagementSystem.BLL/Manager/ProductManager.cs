@@ -43,12 +43,15 @@ namespace InventoryManagementSystem.BLL.Manager
 		{
 			var productModel = _productRepo.GetAll();
 			var ProductDtoList = productModel.Select(x => new ProductReadDto(){ 
+				ProductId = x.ProductId,
 				Name = x.Name,
 				Description = x.Description,
 				Price = x.Price,
 				ImageUrl = x.ImageUrl,
 				CompanyName = x.company.Name,
 				CategoryName = x.category.Name,
+				MinimumStockToRequest = x.MinimumStockToRequest,
+				DiscountPrecentage= x.DiscountPrecentage,
 			});
 			return ProductDtoList;
 		}

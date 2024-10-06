@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 		IEnumerable<OrderReadDto> GetAll();
 		OrderReadDto GetbyId(int id);
 		void Add(OrderAddDto OrderAddDto);
-		//void GetOrderWithProductsData(int OrderId);
+		//ReadOrderWithProductsDto GetOrderWithProductsData(int OrderId);
 		void Delete(int id);
 		void SaveChanges();
 	}

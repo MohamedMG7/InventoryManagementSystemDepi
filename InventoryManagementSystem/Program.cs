@@ -10,6 +10,7 @@ using InventoryManagementSystem.BLL.Manager.CategoryManager;
 using InventoryManagementSystem.BLL.Manager.PurchaseManager;
 using InventoryManagementSystem.BLL.Manager.OrderManager;
 using InventoryManagementSystem.DAL.Data.Models;
+using InventoryManagementSystem.BLL.Manager.OrderProductManager;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -46,6 +47,9 @@ namespace InventoryManagementSystem
 
 			builder.Services.AddScoped<IOrderManager, OrderManager>();
 			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+
+			builder.Services.AddScoped<IOrderProductManager, OrderProductManager>();
+			builder.Services.AddScoped<IOrderProductRepo, OrderProductRepo>();
 
 			builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
