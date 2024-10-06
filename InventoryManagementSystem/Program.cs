@@ -6,6 +6,8 @@ using InventoryManagementSystem.BLL.Manager;
 using InventoryManagementSystem.BLL.Manager.UserManager;
 using InventoryManagementSystem.BLL.Manager.ShoppingCartManager;
 using InventoryManagementSystem.BLL.Manager.PaymentManager;
+using InventoryManagementSystem.BLL.Manager.CategoryManager;
+using InventoryManagementSystem.DAL.Data.Models;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -33,6 +35,9 @@ namespace InventoryManagementSystem
 
             builder.Services.AddScoped<IPaymentManager, PaymentManager>();
             builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
+
+            builder.Services.AddScoped<ICategoryManager, CategoryManager>();
+            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 
             builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.DAL.Reposatiries
 {
-	internal class CategoryRepo : ICategoryRepo
+	public class CategoryRepo : ICategoryRepo
 	{
 		private readonly InventoryManagementSystemContext _context;
 		public CategoryRepo(InventoryManagementSystemContext context)
