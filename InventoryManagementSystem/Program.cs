@@ -14,6 +14,7 @@ using InventoryManagementSystem.BLL.Manager.OrderProductManager;
 using InventoryManagementSystem.BLL.Manager.CompanyManager;
 using InventoryManagementSystem.BLL.Manager.ProductVariantManager;
 using InventoryManagementSystem.BLL.Manager.CartProductManager;
+using Microsoft.AspNetCore.Identity;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -21,6 +22,12 @@ namespace InventoryManagementSystem
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+
+
+			//Add Identity And add role manager and user manger basedd on app user 
+			//Very important for injection
+			builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
+				AddEntityFrameworkStores<InventoryManagementSystemContext>();
 
 			// Add services to the container.
 
