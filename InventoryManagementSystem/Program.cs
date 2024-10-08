@@ -86,6 +86,7 @@ namespace InventoryManagementSystem
 
 			app.UseAuthorization();
 
+			app.UseAuthentication();
 
 			app.MapControllers();
 
