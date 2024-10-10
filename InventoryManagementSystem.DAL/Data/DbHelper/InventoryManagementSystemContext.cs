@@ -1,9 +1,11 @@
 ﻿using InventoryManagementSystem.DAL.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace InventoryManagementSystem.DAL.Data.DbHelper
 {
-	public class InventoryManagementSystemContext : DbContext
+	public class InventoryManagementSystemContext : IdentityDbContext<User, IdentityRole<int>, int>
 	{
         public InventoryManagementSystemContext(DbContextOptions<InventoryManagementSystemContext> options) : base(options) { }
 

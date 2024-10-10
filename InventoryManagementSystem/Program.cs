@@ -14,6 +14,8 @@ using InventoryManagementSystem.BLL.Manager.OrderProductManager;
 using InventoryManagementSystem.BLL.Manager.CompanyManager;
 using InventoryManagementSystem.BLL.Manager.ProductVariantManager;
 using InventoryManagementSystem.BLL.Manager.CartProductManager;
+using InventoryManagementSystem.BLL.Manager.AccountManager;
+using Microsoft.AspNetCore.Identity;
 namespace InventoryManagementSystem
 {
 	public class Program
@@ -62,6 +64,12 @@ namespace InventoryManagementSystem
 
 			builder.Services.AddScoped<ICartProductManager, CartProductManager>();
 			builder.Services.AddScoped<ICartProductRepo, CartProductRepo>();
+
+			builder.Services.AddScoped<IAccountManager, AccountManager>();
+
+			builder.Services.AddIdentity<User, IdentityRole<int>>()
+			.AddEntityFrameworkStores<InventoryManagementSystemContext>()
+			.AddDefaultTokenProviders();
 
 			builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

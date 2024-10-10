@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
         {
             var users = _userRepo.GetAll();
             var usersList = users.Select(x => new UserReadDto { 
-                UserId = x.UserId,
+                Id = x.Id,
                 Name = x.Name,
                 Email = x.Email,
                 State = x.State,
@@ -57,7 +57,7 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
         {
             var userModel = _userRepo.GetbyID(id);
             UserReadDto userReadDto = new UserReadDto { 
-                UserId = userModel.UserId,
+                Id = userModel.Id,
                 Name = userModel.Name,
                 Email = userModel.Email,
                 State = userModel.State,
