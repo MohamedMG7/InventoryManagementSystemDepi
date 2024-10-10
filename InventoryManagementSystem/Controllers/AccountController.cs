@@ -37,6 +37,25 @@ namespace InventoryManagementSystem.Controllers
 			}
 			return BadRequest(ModelState);
 		}
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(UserLoginDto loginDto)
+        {
+            if (ModelState.IsValid) // Check if the model is valid
+            {
+                var result = await _accountManager.LoginUser(loginDto);
 
-	}
+                if (result.Succeeded)
+                {
+                    return Ok(new { Message = "User logged in successfully!" });
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid username or password.");
+                }
+            }
+
+            return BadRequest(ModelState); // Return any validation errors
+        }
+
+    }
 }
