@@ -57,5 +57,11 @@ namespace InventoryManagementSystem.Controllers
             return BadRequest(ModelState); // Return any validation errors
         }
 
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _accountManager.LogoutUser();
+            return Ok(new { Message = "User logged out successfully!" });
+        }
     }
 }
