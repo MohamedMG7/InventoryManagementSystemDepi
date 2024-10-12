@@ -23,7 +23,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Order order)
 		{
-			_context.Orders.Remove(order);
+			if (order != null) { 
+				order.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<Order> GetAll()

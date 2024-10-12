@@ -18,7 +18,10 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Purchase Purchase)
 		{
-			_context.Purchases.Remove(Purchase);
+			if (Purchase != null)
+			{
+				Purchase.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<Purchase> GetAll()

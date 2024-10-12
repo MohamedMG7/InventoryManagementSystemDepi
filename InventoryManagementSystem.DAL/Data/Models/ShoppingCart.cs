@@ -10,6 +10,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
 		[ForeignKey("user")]
 		public int UserId { get; set; }
         public User user { get; set; }
-		public ICollection<CartProduct> CartProducts { get; set; }
-	}
+		public ICollection<CartProduct> CartProducts { get; set; } = new HashSet<CartProduct>();
+        public bool isDeleted { get; set; }
+    }
 }

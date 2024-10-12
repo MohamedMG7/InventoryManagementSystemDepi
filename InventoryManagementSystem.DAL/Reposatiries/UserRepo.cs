@@ -23,7 +23,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(User user)
 		{
-			_context.Users.Remove(user);
+			if (user != null) { 
+				user.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<User> GetAll()

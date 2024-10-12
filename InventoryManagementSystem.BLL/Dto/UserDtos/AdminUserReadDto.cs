@@ -13,5 +13,6 @@ namespace InventoryManagementSystem.BLL.Dto.UserDtos
         public string PhoneNumber { get; set; }
         public string UserType { get; set; }
         public bool EmailConfirmed { get; set; }
+        public bool isDeleted { get; set; }
     }
 }

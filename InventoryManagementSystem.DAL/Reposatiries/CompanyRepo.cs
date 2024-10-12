@@ -20,7 +20,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Company Company)
 		{
-			_context.Company.Remove(Company);
+			if (Company != null) { 
+				Company.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<Company> GetAll()

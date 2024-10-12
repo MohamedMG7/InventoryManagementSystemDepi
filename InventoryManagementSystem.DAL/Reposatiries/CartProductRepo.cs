@@ -20,7 +20,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(CartProduct CartProduct)
 		{
-			_context.cartProducts.Remove(CartProduct);
+			if (CartProduct != null) { 
+				CartProduct.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<CartProduct> GetAll()

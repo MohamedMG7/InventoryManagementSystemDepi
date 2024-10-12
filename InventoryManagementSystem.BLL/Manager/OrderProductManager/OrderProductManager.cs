@@ -16,7 +16,6 @@ namespace InventoryManagementSystem.BLL.Manager.OrderProductManager
 		{
 			var orderProductModel = new OrderProduct
 			{
-				OrderId = orderProductAddDto.OrderId,
 				ProductId = orderProductAddDto.ProductId,
 				Quantity = orderProductAddDto.Quantity,
 				PriceAtPurchase = orderProductAddDto.PriceAtPurchase
@@ -28,8 +27,11 @@ namespace InventoryManagementSystem.BLL.Manager.OrderProductManager
 		public void Delete(int OrderId, int ProductId)
 		{
 			var orderProductModel = _orderProductRepo.GetbyID(OrderId,ProductId);
-			_orderProductRepo.Delete(orderProductModel);
-			_orderProductRepo.SaveChanges();
+			if (orderProductModel != null && !orderProductModel.isDeleted) {
+				_orderProductRepo.Delete(orderProductModel);
+				_orderProductRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<OrderProductReadDto> GetAll()

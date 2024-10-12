@@ -23,7 +23,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Payment payment)
 		{
-			_context.Payments.Remove(payment);
+			if (payment != null) { 
+				payment.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<Payment> GetAll()

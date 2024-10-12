@@ -4,6 +4,7 @@ using InventoryManagementSystem.DAL.Data.DbHelper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.DAL.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemContext))]
-    partial class InventoryManagementSystemContextModelSnapshot : ModelSnapshot
+    [Migration("20241012182430_Adding_Soft_Delete")]
+    partial class Adding_Soft_Delete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

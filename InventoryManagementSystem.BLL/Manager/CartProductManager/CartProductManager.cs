@@ -26,8 +26,11 @@ namespace InventoryManagementSystem.BLL.Manager.CartProductManager
 		public void Delete(int ShoppingCartid, int ProductId)
 		{
 			var cartProductModel = _cartProductRepo.GetbyID(ShoppingCartid,ProductId);
-			_cartProductRepo.Delete(cartProductModel);
-			_cartProductRepo.SaveChanges();
+			if (cartProductModel != null && !cartProductModel.isDeleted) {
+				_cartProductRepo.Delete(cartProductModel);
+				_cartProductRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<CartProductReadDto> GetAll()

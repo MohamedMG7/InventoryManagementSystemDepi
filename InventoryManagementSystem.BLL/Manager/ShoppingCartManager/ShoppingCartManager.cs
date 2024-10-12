@@ -2,6 +2,7 @@
 using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.DAL.Reposatiries;
+using Microsoft.AspNet.Identity;
 
 namespace InventoryManagementSystem.BLL.Manager.ShoppingCartManager
 {
@@ -27,9 +28,12 @@ namespace InventoryManagementSystem.BLL.Manager.ShoppingCartManager
         void IShoppingCartManger.Delete(int id)
         {
             var cart = _shoppingCartRepo.GetbyID(id);
-            _shoppingCartRepo.Delete(cart);
-            _shoppingCartRepo.SaveChanges();
-        }
+			if (cart != null && !cart.isDeleted)
+			{
+				_shoppingCartRepo.Delete(cart);
+				_shoppingCartRepo.SaveChanges();
+			}
+		}
 
         IEnumerable<ShoppingCartReadDto> IShoppingCartManger.GetAll()
         {

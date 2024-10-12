@@ -7,5 +7,6 @@ namespace InventoryManagementSystem.BLL.Dto.OrderDtos
 		public DateTime Date { get; set; }
 		public string TrackingNumber { get; set; }
 		public int UserId { get; set; }
+
 	}
 }

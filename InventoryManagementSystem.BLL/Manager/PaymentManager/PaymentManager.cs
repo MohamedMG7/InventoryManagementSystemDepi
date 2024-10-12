@@ -33,8 +33,11 @@ namespace InventoryManagementSystem.BLL.Manager.PaymentManager
         public void Delete(int id)
         {
             var paymentModel = _paymentRepo.GetbyID(id);
-            _paymentRepo.Delete(paymentModel);
-            _paymentRepo.SaveChanges();
+            if (paymentModel != null && !paymentModel.isDeleted) {
+				_paymentRepo.Delete(paymentModel);
+				_paymentRepo.SaveChanges();
+			}
+            
         }
 
         public IEnumerable<PaymentReadDto> GetAll()

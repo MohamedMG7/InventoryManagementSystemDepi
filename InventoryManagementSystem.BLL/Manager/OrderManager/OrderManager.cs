@@ -22,18 +22,41 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 			{
 				TrackingNumber = OrderAddDto.TrackingNumber,
 				UserId = OrderAddDto.UserId,
-				Date = DateTime.Now
+				Date = DateTime.Now,
+				OrderProducts = new List<OrderProduct>()
 			};
-			
+
+			foreach (var productDto in OrderAddDto.Products)
+			{
+				var orderProduct = new OrderProduct
+				{
+					// Set the OrderId to associate this product with the order
+					OrderId = orderModel.OrderId, // Make sure OrderId is available here; set after order save
+					ProductId = productDto.ProductId,
+					Quantity = productDto.Quantity,
+					PriceAtPurchase = productDto.PriceAtPurchase // Use PriceAtPurchase from DTO
+				};
+
+				orderModel.OrderProducts.Add(orderProduct);
+			}
+
 			_orderRepo.Add(orderModel);
 			_orderRepo.SaveChanges();
+
+			foreach (var orderProduct in orderModel.OrderProducts)
+			{
+				orderProduct.OrderId = orderModel.OrderId; // Ensure OrderId is set correctly
+			}
 		}
 
 		public void Delete(int id)
 		{
 			var OrderModel = _orderRepo.GetbyID(id);
-			_orderRepo.Delete(OrderModel);
-			_orderRepo.SaveChanges();
+			if (OrderModel != null && !OrderModel.isDeleted) {
+				_orderRepo.Delete(OrderModel);
+				_orderRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<OrderReadDto> GetAll()

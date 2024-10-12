@@ -20,7 +20,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(PurchaseProduct PurchaseProduct)
 		{
-			_context.PurchaseProducts.Remove(PurchaseProduct);
+			if (PurchaseProduct != null) { 
+				PurchaseProduct.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<PurchaseProduct> GetAll()

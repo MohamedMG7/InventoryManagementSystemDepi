@@ -9,6 +9,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public string City { get; set; }
         public string Street { get; set; }
         public string PhoneNumber { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+        public bool isDeleted { get; set; }
     }
 }

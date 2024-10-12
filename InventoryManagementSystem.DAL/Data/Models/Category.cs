@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace InventoryManagementSystem.DAL.Data.Models
 {
 	public class Category
@@ -11,6 +6,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-		public ICollection<Product> Products { get; set; }
-	}
+		public ICollection<Product> Products { get; set; } = new HashSet<Product>();
+        public bool isDeleted { get; set; }
+    }
 }

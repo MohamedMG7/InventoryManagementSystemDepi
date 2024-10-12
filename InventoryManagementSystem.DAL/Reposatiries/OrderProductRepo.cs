@@ -20,7 +20,10 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(OrderProduct OrderProduct)
 		{
-			_context.orderProducts.Remove(OrderProduct);
+			if (OrderProduct != null)
+			{
+				OrderProduct.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<OrderProduct> GetAll()

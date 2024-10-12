@@ -18,7 +18,10 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Product product)
 		{
-			_context.Products.Remove(product);
+			if (product != null)
+			{
+				product.isDeleted = true; // it will get updated automatically in the manger when we save changes
+			}
 		}
 
 		public IEnumerable<Product> GetAll()

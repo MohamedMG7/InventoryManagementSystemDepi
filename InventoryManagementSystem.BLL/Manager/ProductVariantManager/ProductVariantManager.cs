@@ -29,8 +29,11 @@ namespace InventoryManagementSystem.BLL.Manager.ProductVariantManager
 		public void Delete(int id)
 		{
 			var productVariantModel = _productVariantRepo.GetbyID(id);
-			_productVariantRepo.Delete(productVariantModel);
-			_productVariantRepo.SaveChanges();
+			if (productVariantModel != null && !productVariantModel.isDeleted) {
+				_productVariantRepo.Delete(productVariantModel);
+				_productVariantRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<ProductVariantReadDto> GetAll()

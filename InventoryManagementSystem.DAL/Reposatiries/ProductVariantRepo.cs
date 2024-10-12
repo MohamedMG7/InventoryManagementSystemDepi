@@ -19,7 +19,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(ProductVariant ProductVariant)
 		{
-			_context.productVariants.Remove(ProductVariant);
+			if (ProductVariant != null) { 
+				ProductVariant.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<ProductVariant> GetAll()

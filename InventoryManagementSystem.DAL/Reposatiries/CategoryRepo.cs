@@ -19,7 +19,9 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public void Delete(Category Category)
 		{
-			_context.Category.Remove(Category);
+			if (Category != null) { 
+				Category.isDeleted = true;
+			}
 		}
 
 		public IEnumerable<Category> GetAll()

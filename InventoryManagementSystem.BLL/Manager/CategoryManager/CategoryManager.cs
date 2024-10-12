@@ -26,8 +26,11 @@ namespace InventoryManagementSystem.BLL.Manager.CategoryManager
         public void Delete(int id)
         {
             var category = _categoryRepo.GetbyID(id);
-            _categoryRepo.Delete(category);
-            _categoryRepo.SaveChanges();
+            if (category != null && !category.isDeleted) {
+				_categoryRepo.Delete(category);
+				_categoryRepo.SaveChanges();
+			}
+            
         }
 
         public IEnumerable<CategoryReadDto> GetAll()

@@ -30,8 +30,11 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 		public void Delete(int id)
 		{
 			var companyModel = _companyRepo.GetbyID(id);
-			_companyRepo.Delete(companyModel);
-			_companyRepo.SaveChanges();
+			if (companyModel != null && !companyModel.isDeleted) {
+				_companyRepo.Delete(companyModel);
+				_companyRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<CompanyReadDto> GetAll()

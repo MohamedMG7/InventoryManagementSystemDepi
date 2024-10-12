@@ -34,8 +34,10 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
         public void Delete(int id)
         {
             var user = _userRepo.GetbyID(id);
-            _userRepo.Delete(user);
-            _userRepo.SaveChanges();
+            if (user != null && !user.isDeleted) {
+				_userRepo.Delete(user);
+				_userRepo.SaveChanges();
+			}
         }
 
         public IEnumerable<UserReadDto> GetAll()
@@ -49,6 +51,7 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
                 City = x.City,
                 Street = x.Street,
                 PhoneNumber = x.PhoneNumber,
+                isDeleted = x.isDeleted
             });
             return usersList;
         }
@@ -63,7 +66,8 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
                 State = userModel.State,
                 City = userModel.City,
                 Street = userModel.Street,
-                PhoneNumber = userModel.PhoneNumber
+                PhoneNumber = userModel.PhoneNumber,
+                isDeleted = userModel.isDeleted,
             };
 
             return userReadDto;

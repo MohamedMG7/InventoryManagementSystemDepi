@@ -11,5 +11,6 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public int QuantityPurchased { get; set; }
         public double UnitCost { get; set; }
         public double TotalCost { get; set; }
+        public bool isDeleted { get; set; }
     }
 }

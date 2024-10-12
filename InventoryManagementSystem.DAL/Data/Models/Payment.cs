@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace InventoryManagementSystem.DAL.Data.Models
 {
 	public class Payment
@@ -13,6 +7,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public string PaymentType { get; set; }
         public string PaymentStatus { get; set; }
         public TimeOnly PaymentTime { get; set; }
+        public bool isDeleted { get; set; }
         public int OrderId { get; set; }
         public Order order { get; set; }
 

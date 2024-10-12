@@ -35,8 +35,10 @@ namespace InventoryManagementSystem.BLL.Manager
 		public void Delete(int id)
 		{
 			var product = _productRepo.GetbyID(id);
-			_productRepo.Delete(product);
-			_productRepo.SaveChanges();
+			if (product != null && !product.isDeleted) {
+				_productRepo.Delete(product);
+				_productRepo.SaveChanges();
+			}
 		}
 
 		public IEnumerable<ProductReadDto> GetAll()

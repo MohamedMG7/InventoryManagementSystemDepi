@@ -28,8 +28,11 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 		public void Delete(int id)
 		{
 			var purchaseModel = _purchaseRepo.GetbyID(id);
-			_purchaseRepo.Delete(purchaseModel);
-			_purchaseRepo.SaveChanges();
+			if (purchaseModel != null && !purchaseModel.isDeleted) {
+				_purchaseRepo.Delete(purchaseModel);
+				_purchaseRepo.SaveChanges();
+			}
+			
 		}
 
 		public IEnumerable<PurchaseReadDto> GetAll()

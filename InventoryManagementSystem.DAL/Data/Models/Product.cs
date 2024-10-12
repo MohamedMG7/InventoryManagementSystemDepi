@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace InventoryManagementSystem.DAL.Data.Models
 {
 	public class Product
@@ -13,8 +8,9 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public string Description { get; set; }
         public double Price { get; set; }
         public string ImageUrl { get; set; }
+        public bool isDeleted { get; set; }
 
-        
+
         public int CompanyId { get; set; }
         public Company company { get; set; }
 
@@ -24,8 +20,8 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public int? MinimumStockToRequest { get; set; }
         public int? DiscountPrecentage { get; set; }
 
-        public ICollection<CartProduct> CartProducts { get; set; }
-        public ICollection<OrderProduct> OrderProducts { get; set; }
-        public ICollection<ProductVariant> productVariants { get; set; }
+        public ICollection<CartProduct> CartProducts { get; set; } = new HashSet<CartProduct>();
+        public ICollection<OrderProduct> OrderProducts { get; set; } = new HashSet<OrderProduct>();
+        public ICollection<ProductVariant> productVariants { get; set; } = new HashSet<ProductVariant>();
     }
 }

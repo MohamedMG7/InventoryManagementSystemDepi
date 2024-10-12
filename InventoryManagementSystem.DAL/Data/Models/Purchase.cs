@@ -8,7 +8,8 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public double TotalCost { get; set; }
         public string Notes { get; set; }
         public string PaymentMethod { get; set; }
-        public ICollection<PurchaseProduct> purchaseProducts { get; set; }
+        public bool isDeleted { get; set; }
+        public ICollection<PurchaseProduct> purchaseProducts { get; set; } = new HashSet<PurchaseProduct>();
 
         public Purchase() { 
             DateTime = DateTime.Now;
