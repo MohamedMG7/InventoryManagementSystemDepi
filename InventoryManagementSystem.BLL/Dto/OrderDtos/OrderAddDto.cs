@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.DAL.Data.Models;
+﻿using InventoryManagementSystem.BLL.Dto.OrderProductDtos;
+using InventoryManagementSystem.DAL.Data.Models;
 
 namespace InventoryManagementSystem.BLL.Dto.OrderDtos
 {
@@ -6,5 +7,6 @@ namespace InventoryManagementSystem.BLL.Dto.OrderDtos
 	{
 		public string TrackingNumber { get; set; }
 		public int UserId { get; set; }
-	}
+        public ICollection<OrderProductAddDto> Products { get; set; }
+    }
 }

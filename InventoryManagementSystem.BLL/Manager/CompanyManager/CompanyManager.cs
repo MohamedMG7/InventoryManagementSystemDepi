@@ -51,18 +51,18 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 
 		public CompanyReadDto GetbyId(int id)
 		{
-			var orderModel = _companyRepo.GetbyID(id);
-			CompanyReadDto orderReadDto = new CompanyReadDto
+			var companyModel = _companyRepo.GetbyID(id);
+			CompanyReadDto companyReadDto = new CompanyReadDto
 			{
-				CompanyId = orderModel.CompanyId,
-				Name = orderModel.Name,
-				State = orderModel.State,
-				City = orderModel.City,
-				Street = orderModel.Street,
-				PhoneNumber = orderModel.PhoneNumber
+				CompanyId = companyModel.CompanyId,
+				Name = companyModel.Name,
+				State = companyModel.State,
+				City = companyModel.City,
+				Street = companyModel.Street,
+				PhoneNumber = companyModel.PhoneNumber
 			};
 
-			return orderReadDto;
+			return companyReadDto;
 		}
 
 		public void SaveChanges()

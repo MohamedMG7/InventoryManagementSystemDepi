@@ -13,6 +13,6 @@ namespace InventoryManagementSystem.DAL.Data.Models
 
 
 		public ShoppingCart shoppingCart { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order> Orders { get; set; } = new HashSet<Order>();	
     }
 }

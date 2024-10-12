@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         private readonly SignInManager<User> _signInManager;
 
         public AccountManager(UserManager<User> userManager
-            ,SignInManager<User> signInManager)  // Corrected constructor
+            ,SignInManager<User> signInManager)  
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -26,11 +26,11 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
                 if (isPasswordValid)
                 {
                     await _signInManager.SignInAsync(userModel, loginDto.RememberMe);
-                    return SignInResult.Success; // or return a custom result
+                    return SignInResult.Success; 
                 }
             }
 
-            return SignInResult.Failed; // or handle invalid login attempts differently
+            return SignInResult.Failed; 
         }
 
 
@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         {
             var user = new User
             {
-                UserName = registerDto.Email,  // Set UserName to Email for Identity
+                UserName = registerDto.Email, 
                 Email = registerDto.Email,
                 Name = registerDto.Name,
                 PhoneNumber = registerDto.PhoneNumber,
