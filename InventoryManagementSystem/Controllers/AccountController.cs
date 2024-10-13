@@ -16,27 +16,38 @@ namespace InventoryManagementSystem.Controllers
 			_accountManager = accountManager;
 		}
 
-		[HttpPost("register")]
-		public async Task<IActionResult> Register([FromBody] UserRegisterDto registerDto)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-			var result = await _accountManager.RegisterUser(registerDto);
-			if (result.Succeeded)
-			{
-				return Ok(new { Message = "User registered successfully!" });
-			}
-
-			// Return the errors if the registration failed
-			foreach (var error in result.Errors)
-			{
-				ModelState.AddModelError(string.Empty, error.Description);
-			}
-			return BadRequest(ModelState);
-		}
+            var result = await _accountManager.RegisterUser(registerDto);
+            if (result.Succeeded)
+            {
+                var roleResult = await _accountManager.AddRoleAsync(registerDto, "Admin");
+                if (roleResult.Succeeded)
+                {
+                    return Ok(new { Message = "User registered and added to Admin role successfully!" });
+                }
+                else
+                {
+                    foreach (var error in roleResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return BadRequest(ModelState);
+                }
+            }
+            // Return the errors if the registration failed
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return BadRequest(ModelState);
+        }
         [HttpPost("Login")]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {

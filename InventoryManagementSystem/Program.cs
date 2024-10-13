@@ -67,14 +67,22 @@ namespace InventoryManagementSystem
 
 			builder.Services.AddScoped<IAccountManager, AccountManager>();
 
-			builder.Services.AddIdentity<User, IdentityRole<int>>()
+            builder.Services.AddScoped<IAccountManager, AccountManager>();
+
+            builder.Services.AddScoped<IAccountManager, AccountManager>();
+
+            builder.Services.AddIdentity<User, IdentityRole<int>>()
 			.AddEntityFrameworkStores<InventoryManagementSystemContext>()
 			.AddDefaultTokenProviders();
+
 
 			builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
 			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			var app = builder.Build();
+            builder.Services.AddScoped<RoleManager<IdentityRole>>();
+
+
+            var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())

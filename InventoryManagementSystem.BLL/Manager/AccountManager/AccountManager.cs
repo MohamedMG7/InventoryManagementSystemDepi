@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.BLL.Dto.UserDtos;
+﻿using InventoryManagementSystem.BLL.Dto;
+using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.DAL.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -9,15 +10,19 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountManager(UserManager<User> userManager
-            ,SignInManager<User> signInManager)  // Corrected constructor
+            ,SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager
+            )  // Corrected constructor
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
 
-        public async Task<SignInResult> LoginUser(UserLoginDto loginDto)
+        public async Task<SignInResult> LoginUser(Dto.UserDtos.UserLoginDto loginDto)
         {
             var userModel = await _userManager.FindByNameAsync(loginDto.Email);
             if (userModel != null)
@@ -58,5 +63,29 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<IdentityResult> CreateRoleAsync(RoleMnagerDto newRole)
+        {
+            IdentityRole role = new IdentityRole
+            {
+                Name = newRole.RoleName
+            };
+            IdentityResult result = await _roleManager.CreateAsync(role);
+            return result;
+        }
+        public async Task<IdentityResult> AddRoleAsync(UserRegisterDto registerDto, string roleName)
+        {
+            var user = await _userManager.FindByEmailAsync(registerDto.Email);
+            if (user != null)
+            {
+                // تحقق مما إذا كان الدور موجودًا، إذا لم يكن موجودًا، قم بإنشائه
+                if (!await _roleManager.RoleExistsAsync(roleName))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+
+                return await _userManager.AddToRoleAsync(user, roleName);
+            }
+            return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+        }
     }
 }
