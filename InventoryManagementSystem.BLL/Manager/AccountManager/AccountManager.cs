@@ -10,11 +10,11 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
         public AccountManager(UserManager<User> userManager
             ,SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager
+            RoleManager<IdentityRole<int>> roleManager
             )  // Corrected constructor
         {
             _userManager = userManager;
@@ -65,27 +65,33 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 
         public async Task<IdentityResult> CreateRoleAsync(RoleMnagerDto newRole)
         {
-            IdentityRole role = new IdentityRole
+            IdentityRole<int> role = new IdentityRole<int>
             {
                 Name = newRole.RoleName
             };
             IdentityResult result = await _roleManager.CreateAsync(role);
             return result;
         }
-        public async Task<IdentityResult> AddRoleAsync(UserRegisterDto registerDto, string roleName)
-        {
-            var user = await _userManager.FindByEmailAsync(registerDto.Email);
-            if (user != null)
-            {
-                // تحقق مما إذا كان الدور موجودًا، إذا لم يكن موجودًا، قم بإنشائه
-                if (!await _roleManager.RoleExistsAsync(roleName))
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(roleName));
-                }
 
-                return await _userManager.AddToRoleAsync(user, roleName);
-            }
-            return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+        public Task<IdentityResult> AddRoleAsync(UserRegisterDto registerDto, string roleName)
+        {
+            throw new NotImplementedException();
         }
+
+        //public async Task<IdentityResult> AddRoleAsync(UserRegisterDto registerDto, string roleName)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(registerDto.Email);
+        //    if (user != null)
+        //    {
+        //        if (!await _roleManager.RoleExistsAsync(roleName))
+        //        {
+        //            await _roleManager.CreateAsync(new IdentityRole(roleName));
+        //        }
+
+        //        return await _userManager.AddToRoleAsync(user, roleName);
+        //    }
+        //    return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+        //}
+
     }
 }

@@ -16,89 +16,91 @@ using InventoryManagementSystem.BLL.Manager.ProductVariantManager;
 using InventoryManagementSystem.BLL.Manager.CartProductManager;
 using InventoryManagementSystem.BLL.Manager.AccountManager;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+
 namespace InventoryManagementSystem
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
+            // Add services to the container.
 
-			builder.Services.AddControllers();
-			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddSwaggerGen();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
+            // Add AutoMapper service
             builder.Services.AddAutoMapper(map => map.AddProfile(new MappingProfile()));
-			builder.Services.AddScoped<IProductRepo, ProductRepo>();
-			builder.Services.AddScoped<IProductManager, ProductManager>();
-            //builder.Services.AddScoped<IProductManager, ProductAutoMapperManager>();
+
+            // Scoped Services
+            builder.Services.AddScoped<IProductRepo, ProductRepo>();
+            builder.Services.AddScoped<IProductManager, ProductManager>();
             builder.Services.AddScoped<IUserManager, UserManager>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
-
             builder.Services.AddScoped<IShoppingCartManger, ShoppingCartManager>();
             builder.Services.AddScoped<IShoppingCartRepo, ShoppingCartRepo>();
-
             builder.Services.AddScoped<IPaymentManager, PaymentManager>();
             builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
-
             builder.Services.AddScoped<ICategoryManager, CategoryManager>();
             builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
-
-			builder.Services.AddScoped<IPurchaseManager, PurchaseManager>();
-			builder.Services.AddScoped<IPurchaseRepo, PurchaseRepo>();
-
-			builder.Services.AddScoped<IOrderManager, OrderManager>();
-			builder.Services.AddScoped<IOrderRepo, OrderRepo>();
-
-			builder.Services.AddScoped<IOrderProductManager, OrderProductManager>();
-			builder.Services.AddScoped<IOrderProductRepo, OrderProductRepo>();
-
-			builder.Services.AddScoped<ICompanyManager, CompanyManager>();
-			builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
-
-			builder.Services.AddScoped<IProductVariantManager, ProductVariantManager>();
-			builder.Services.AddScoped<IProductVariantRepo, ProductVariantRepo>();
-
-			builder.Services.AddScoped<ICartProductManager, CartProductManager>();
-			builder.Services.AddScoped<ICartProductRepo, CartProductRepo>();
-
-			builder.Services.AddScoped<IAccountManager, AccountManager>();
-
+            builder.Services.AddScoped<IPurchaseManager, PurchaseManager>();
+            builder.Services.AddScoped<IPurchaseRepo, PurchaseRepo>();
+            builder.Services.AddScoped<IOrderManager, OrderManager>();
+            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+            builder.Services.AddScoped<IOrderProductManager, OrderProductManager>();
+            builder.Services.AddScoped<IOrderProductRepo, OrderProductRepo>();
+            builder.Services.AddScoped<ICompanyManager, CompanyManager>();
+            builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
+            builder.Services.AddScoped<IProductVariantManager, ProductVariantManager>();
+            builder.Services.AddScoped<IProductVariantRepo, ProductVariantRepo>();
+            builder.Services.AddScoped<ICartProductManager, CartProductManager>();
+            builder.Services.AddScoped<ICartProductRepo, CartProductRepo>();
             builder.Services.AddScoped<IAccountManager, AccountManager>();
 
-            builder.Services.AddScoped<IAccountManager, AccountManager>();
-
+            // Identity Services
             builder.Services.AddIdentity<User, IdentityRole<int>>()
-			.AddEntityFrameworkStores<InventoryManagementSystemContext>()
-			.AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<InventoryManagementSystemContext>()
+                .AddDefaultTokenProviders();
 
+            // DbContext
+            builder.Services.AddDbContext<InventoryManagementSystemContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-			builder.Services.AddDbContext<InventoryManagementSystemContext>(options => 
-			options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddScoped<RoleManager<IdentityRole>>();
-
+            // Add Session services
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
             var app = builder.Build();
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+            // Configure the HTTP request pipeline
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-			app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-			app.UseAuthorization();
+            app.UseRouting();
 
+            // Add session middleware
+            app.UseSession();
 
-			app.MapControllers();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.Run();
-		}
-	}
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
 }
