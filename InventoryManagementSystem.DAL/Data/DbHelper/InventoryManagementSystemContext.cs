@@ -19,6 +19,9 @@ namespace InventoryManagementSystem.DAL.Data.DbHelper
 				.HasKey(sc => new { sc.OrderId, sc.ProductId });
 
 			modelBuilder.Entity<PurchaseProduct>()
+			   .HasKey(pp => new { pp.PurchaseId, pp.ProductVariantId });
+
+			modelBuilder.Entity<PurchaseProduct>()
 		   .HasOne(pp => pp.ProductVariant)      // Specify the relationship to ProductVariant
 		   .WithMany(pv => pv.purchaseProducts)  // Assuming ProductVariant has a navigation property to PurchaseProduct
 		   .HasForeignKey(pp => pp.ProductVariantId) // Specify the foreign key

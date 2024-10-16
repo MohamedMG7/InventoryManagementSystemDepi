@@ -3,7 +3,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
 {
 	public class PurchaseProduct
 	{
-        public int PurchaseProductId { get; set; }
+        //public int PurchaseProductId { get; set; } this should be deleted and the pk for this table should be a composite pk 
         public int PurchaseId { get; set; }
         public Purchase purchase { get; set; }
         public int ProductVariantId { get; set; }

@@ -28,27 +28,22 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         public async Task<string> LoginUser(UserLoginDto loginDto) // we will return a string (Token) To The User
         {
             var userModel = await _userManager.FindByNameAsync(loginDto.Email);
+			var userRoles = await _userManager.GetRolesAsync(userModel);
+			string userRole = userRoles.FirstOrDefault();
+
 			if (userModel != null)
 			{
 				bool isPasswordValid = await _userManager.CheckPasswordAsync(userModel, loginDto.Password);
 				if (isPasswordValid)
 				{
-					// Generate JWT token
-					var tokenHandler = new JwtSecurityTokenHandler();
-					var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-					var tokenDescriptor = new SecurityTokenDescriptor
+					List<Claim> claims = new List<Claim>()
 					{
-						Subject = new ClaimsIdentity(new[]
-						{
-					new Claim(ClaimTypes.NameIdentifier, userModel.Id.ToString()),
-					new Claim(ClaimTypes.Email, userModel.Email)
-					}),
-						Expires = DateTime.UtcNow.AddHours(1),
-						SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+						new Claim(JwtRegisteredClaimNames.Sub, userModel.Id.ToString()),
+						new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
+						new Claim(ClaimTypes.Name, userModel.Name),
+						new Claim(ClaimTypes.Role, userRole),
 					};
-
-					var token = tokenHandler.CreateToken(tokenDescriptor);
-					return tokenHandler.WriteToken(token); // Return the token to the client
+					return GenerateToken(claims,true);
 				}
 			}
 
@@ -97,5 +92,41 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
             await _signInManager.SignOutAsync();
         }
 
-    }
+		//creating JWT
+		private string GenerateToken(IList<Claim> claims, bool RememberMe)
+		{
+
+			var SecretKeyString = _configuration["Jwt:Key"];
+			var issuer = _configuration["Jwt:Issuer"];
+			var audience = _configuration["Jwt:Audience"];
+			var SecretKeyByte = Encoding.ASCII.GetBytes(SecretKeyString);
+			SecurityKey securityKey = new SymmetricSecurityKey(SecretKeyByte);
+			
+
+			//Combind SecretKey , HasingAlgorithm (SigningCredentials)
+			SigningCredentials signingCredential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+			
+			DateTime tokenExpiration = RememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(2);
+
+			
+
+			JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
+			(
+				claims: claims,
+				issuer: issuer,
+				audience: audience,
+				signingCredentials: signingCredential,
+				expires: tokenExpiration
+			);
+			
+			JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+			string token = handler.WriteToken(jwtSecurityToken);
+
+			
+
+			return token;
+		}
+
+	}
 }

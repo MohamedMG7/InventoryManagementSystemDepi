@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.BLL.Dto.PurchaseDtos;
 using InventoryManagementSystem.BLL.Manager.PurchaseManager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace InventoryManagementSystem.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Admin")]
 	public class PurchaseController : ControllerBase
 	{
 		private readonly IPurchaseManager _purchaseManager;

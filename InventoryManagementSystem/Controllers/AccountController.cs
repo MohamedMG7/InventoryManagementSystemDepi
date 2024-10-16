@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.Controllers
 			return BadRequest(ModelState);
 		}
         [HttpPost("Login")]
-        public async Task<IActionResult> Login(UserLoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto loginDto)
         {
 			if (!ModelState.IsValid) 
 			{

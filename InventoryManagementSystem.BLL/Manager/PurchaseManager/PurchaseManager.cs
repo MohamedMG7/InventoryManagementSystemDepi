@@ -2,6 +2,7 @@
 using InventoryManagementSystem.BLL.Dto.PurchaseDtos;
 using InventoryManagementSystem.DAL.Reposatiries;
 using InventoryManagementSystem.DAL.Data.Models;
+using InventoryManagementSystem.BLL.Dto.OrderDtos;
 
 namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 {
@@ -14,15 +15,36 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
         }
         public void Add(PurchaseAddDto purchaseAddDto)
 		{
-			var purchaseModel = new Purchase { 
-				TotalCost = purchaseAddDto.TotalCost,
+			var purchaseModel = new Purchase {
 				Notes = purchaseAddDto.Notes,
-				PaymentMethod = purchaseAddDto.PaymentMethod
+				PaymentMethod = purchaseAddDto.PaymentMethod,
+				purchaseProducts = new List<PurchaseProduct>()
 			};
+
+			foreach (var purchaseProductDto in purchaseAddDto.Products)
+			{
+				var purchaseProduct = new PurchaseProduct
+				{
+					// Set the OrderId to associate this product with the order
+					ProductVariantId = purchaseProductDto.ProductVariantId,
+					UnitCost = purchaseProductDto.UnitCost,
+					QuantityPurchased = purchaseProductDto.QuantityPurchased,
+					TotalCost = purchaseProductDto.UnitCost * purchaseProductDto.QuantityPurchased,
+				};
+
+				purchaseModel.purchaseProducts.Add(purchaseProduct);
+			}
+
+			purchaseModel.TotalCost = purchaseModel.purchaseProducts.Sum(pp => pp.TotalCost);
 
 			purchaseModel.DateTime = DateTime.Now; 
 			_purchaseRepo.Add(purchaseModel);
 			_purchaseRepo.SaveChanges();
+
+			foreach (var purchaseProduct in purchaseModel.purchaseProducts)
+			{
+				purchaseProduct.PurchaseId = purchaseModel.PurchaseId;
+			}
 		}
 
 		public void Delete(int id)
