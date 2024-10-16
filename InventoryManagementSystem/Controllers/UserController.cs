@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.BLL.Dto;
 using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.BLL.Manager.UserManager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,8 @@ namespace InventoryManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+	[Authorize(Roles = "Admin")]
+	public class UserController : ControllerBase
     {
         private readonly IUserManager _userManager;
         public UserController(IUserManager userManager)

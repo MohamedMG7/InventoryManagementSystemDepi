@@ -23,6 +23,12 @@ namespace InventoryManagementSystem.DAL.Data.DbHelper
 		   .WithMany(pv => pv.purchaseProducts)  // Assuming ProductVariant has a navigation property to PurchaseProduct
 		   .HasForeignKey(pp => pp.ProductVariantId) // Specify the foreign key
 		   .OnDelete(DeleteBehavior.Restrict);
+
+			//seeding roles 
+			modelBuilder.Entity<IdentityRole<int>>().HasData(
+			new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+			new IdentityRole<int> { Id = 2, Name = "User", NormalizedName = "USER" }
+			);
 		}
 
 		public DbSet<Product> Products { get; set; }

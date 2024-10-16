@@ -5,12 +5,11 @@ namespace InventoryManagementSystem.BLL.Dto.UserDtos
 {
 	public class UserLoginDto
 	{
-		[Required]
-		public string Email { get; set; } // User's email
-        [Required]
-		[DataType(DataType.Password)]
-        public string Password { get; set; } // User's password
-
-		public bool RememberMe { get; set; } // Option to remember user on device
+		[Required(ErrorMessage = "Email Is Required")]
+		[EmailAddress(ErrorMessage = "Invalid Email Format")]
+		public string Email { get; set; } 
+        
+		[Required(ErrorMessage = "Password Is Required")]
+        public string Password { get; set; } 
 	}
 }
