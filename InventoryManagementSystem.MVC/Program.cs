@@ -32,40 +32,7 @@ namespace InventoryManagementSystem.MVC
             builder.Services.AddAutoMapper(map => map.AddProfile(new MappingProfile()));
 
             // Add Repositories and Managers
-            builder.Services.AddScoped<IProductRepo, ProductRepo>();
-            builder.Services.AddScoped<IProductManager, ProductManager>();
-
-            builder.Services.AddScoped<IUserManager, UserManager>();
-            builder.Services.AddScoped<IUserRepo, UserRepo>();
-
-            builder.Services.AddScoped<IShoppingCartManger, ShoppingCartManager>();
-            builder.Services.AddScoped<IShoppingCartRepo, ShoppingCartRepo>();
-
-            builder.Services.AddScoped<IPaymentManager, PaymentManager>();
-            builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
-
-            builder.Services.AddScoped<ICategoryManager, CategoryManager>();
-            builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
-
-            builder.Services.AddScoped<IPurchaseManager, PurchaseManager>();
-            builder.Services.AddScoped<IPurchaseRepo, PurchaseRepo>();
-
-            builder.Services.AddScoped<IOrderManager, OrderManager>();
-            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
-
-            builder.Services.AddScoped<IOrderProductManager, OrderProductManager>();
-            builder.Services.AddScoped<IOrderProductRepo, OrderProductRepo>();
-
-            builder.Services.AddScoped<ICompanyManager, CompanyManager>();
-            builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
-
-            builder.Services.AddScoped<IProductVariantManager, ProductVariantManager>();
-            builder.Services.AddScoped<IProductVariantRepo, ProductVariantRepo>();
-
-            builder.Services.AddScoped<ICartProductManager, CartProductManager>();
-            builder.Services.AddScoped<ICartProductRepo, CartProductRepo>();
-
-            builder.Services.AddScoped<IAccountManager, AccountManager>();
+            RegisterServices(builder.Services);
 
             // Configure Identity
             builder.Services.AddIdentity<User, IdentityRole<int>>()
@@ -102,6 +69,45 @@ namespace InventoryManagementSystem.MVC
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            // Repository and Manager Registrations
+            services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddScoped<IProductManager, ProductManager>();
+
+            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IUserRepo, UserRepo>();
+
+            services.AddScoped<IShoppingCartManger, ShoppingCartManager>();
+            services.AddScoped<IShoppingCartRepo, ShoppingCartRepo>();
+
+            services.AddScoped<IPaymentManager, PaymentManager>();
+            services.AddScoped<IPaymentRepo, PaymentRepo>();
+
+            services.AddScoped<ICategoryManager, CategoryManager>();
+            services.AddScoped<ICategoryRepo, CategoryRepo>();
+
+            services.AddScoped<IPurchaseManager, PurchaseManager>();
+            services.AddScoped<IPurchaseRepo, PurchaseRepo>();
+
+            services.AddScoped<IOrderManager, OrderManager>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
+
+            services.AddScoped<IOrderProductManager, OrderProductManager>();
+            services.AddScoped<IOrderProductRepo, OrderProductRepo>();
+
+            services.AddScoped<ICompanyManager, CompanyManager>();
+            services.AddScoped<ICompanyRepo, CompanyRepo>();
+
+            services.AddScoped<IProductVariantManager, ProductVariantManager>();
+            services.AddScoped<IProductVariantRepo, ProductVariantRepo>();
+
+            services.AddScoped<ICartProductManager, CartProductManager>();
+            services.AddScoped<ICartProductRepo, CartProductRepo>();
+
+            services.AddScoped<IAccountManager, AccountManager>();
         }
     }
 }

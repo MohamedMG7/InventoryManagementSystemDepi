@@ -14,49 +14,49 @@ namespace InventoryManagementSystem.Controllers
             _accountManager = accountManager;
         }
 
-
+        // GET: Account/Register
         [HttpGet]
         [Route("Account/Register")]
         public IActionResult Register()
         {
-            return View();
+            return View(); 
         }
 
-
+        // POST: Account/Register
         [HttpPost]
+        [Route("Account/Register")]
         public async Task<IActionResult> Register(UserRegisterDto registerDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(registerDto); // Return the view with validation errors
+                return View(registerDto); 
             }
 
             var result = await _accountManager.RegisterUser(registerDto);
             if (result.Succeeded)
             {
-                // Redirect to the login page or home page after successful registration
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Login");
             }
 
-            // Add the errors to the model state
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            // Return the view with errors
             return View(registerDto);
         }
 
-        // Login action for MVC
+        // GET: Account/Login
         [HttpGet]
         [Route("Account/Login")]
         public IActionResult Login()
         {
-            return View();
+            return View(); 
         }
 
+        // POST: Account/Login
         [HttpPost]
+        [Route("Account/Login")]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
             if (ModelState.IsValid)
@@ -65,8 +65,7 @@ namespace InventoryManagementSystem.Controllers
 
                 if (result.Succeeded)
                 {
-                    // Redirect to the home page after successful login
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -74,14 +73,16 @@ namespace InventoryManagementSystem.Controllers
                 }
             }
 
-            return View(loginDto); // Return the view with validation errors
+            return View(loginDto); 
         }
 
-        // Logout action for MVC
+        // POST: Account/Logout
+        [HttpPost]
+        [Route("Account/Logout")]
         public async Task<IActionResult> Logout()
         {
             await _accountManager.LogoutUser();
-            return RedirectToAction("Login"); // Redirect to the login page after logout
+            return RedirectToAction("Login");
         }
     }
 }

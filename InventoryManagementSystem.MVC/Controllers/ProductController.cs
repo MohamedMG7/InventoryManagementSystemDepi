@@ -34,14 +34,6 @@ namespace InventoryManagementSystem.Controllers
         }
 
 
-
-
-
-
-
-
-
-
         [HttpGet]
         [Route("Details/{id}")]
         public IActionResult Details(int id)
