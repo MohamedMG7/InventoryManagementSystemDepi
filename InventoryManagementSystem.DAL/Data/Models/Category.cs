@@ -8,5 +8,7 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public string? Description { get; set; }
 		public ICollection<Product> Products { get; set; } = new HashSet<Product>();
         public bool isDeleted { get; set; }
+
+
     }
 }

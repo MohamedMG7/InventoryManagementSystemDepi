@@ -75,7 +75,12 @@ namespace InventoryManagementSystem.BLL.Manager
 			return productReadDto;
 		}
 
-		public void SaveChanges()
+        public IEnumerable<ProductReadDto> GetProductsByCategory(int categoryId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveChanges()
 		{
 			_productRepo.SaveChanges();
 		}

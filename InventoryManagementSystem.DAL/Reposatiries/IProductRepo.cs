@@ -8,9 +8,11 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 	{
 		IEnumerable<Product> GetAll();
 		Product GetbyID(int id);
-		void Delete(Product product);
+        void Delete(Product product);
 		void Update(Product product);
 		void Add(Product product);
 		void SaveChanges();
-	}
+        IEnumerable<Product> GetProductsByCategory(int categoryId);
+
+    }
 }

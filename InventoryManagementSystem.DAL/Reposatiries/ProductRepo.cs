@@ -43,5 +43,11 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		{
 			//This Can be empty because and get handled in the BLL as long as the Entity is tracked by the EF
 		}
-	}
+
+
+        public IEnumerable<Product> GetProductsByCategory(int categoryId)
+        {
+            return _context.Products.Where(p => p.CategoryId == categoryId).ToList();
+        }
+    }
 }

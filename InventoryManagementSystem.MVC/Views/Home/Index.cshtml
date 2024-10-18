@@ -1,0 +1,29 @@
+﻿@using InventoryManagementSystem.BLL.Dto.CategoryDtos
+@model List<CategoryReadDto>
+
+<h2>Categories</h2>
+
+<div class="container">
+    <div class="row">
+        @foreach (var category in Model)
+        {
+            <div class="col-md-4 col-sm-6 mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top" alt="@category.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@category.CategoryId">@category.Name</a>
+                            </h5>
+                        <p class="card-text">
+                            @if (!string.IsNullOrEmpty(category.Description))
+                            {
+                                <span>@category.Description</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
