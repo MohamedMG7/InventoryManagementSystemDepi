@@ -5,17 +5,21 @@ using InventoryManagementSystem.DAL.Reposatiries;
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.BLL.Dto.PaymentDtos;
 using InventoryManagementSystem.BLL.Dto.OrderProductDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagementSystem.BLL.Manager.OrderManager
 {
 	public class OrderManager : IOrderManager
 	{
 		private readonly IOrderRepo _orderRepo;
-        public OrderManager(IOrderRepo orderRepo)
+		private readonly IProductVariantRepo _productVariantRepo;
+		public OrderManager(IOrderRepo orderRepo, IProductVariantRepo productVariantRepo)
         {
             _orderRepo = orderRepo;
+			_productVariantRepo = productVariantRepo;	
         }
 
+		
 		public void Add(OrderAddDto OrderAddDto)
 		{
 			var orderModel = new Order
@@ -26,13 +30,32 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 				OrderProducts = new List<OrderProduct>()
 			};
 
+			#region Validate Availability
+			foreach (var productDto in OrderAddDto.Products)
+			{
+				
+				var productVariant = _productVariantRepo.GetbyID(productDto.ProductVariantId);
+
+				if (productVariant == null)
+				{
+					throw new InvalidOperationException($"Product variant with ID {productDto.ProductVariantId} does not exist.");
+				}
+
+				
+				if (productVariant.QuantityInStock < productDto.Quantity)
+				{
+					throw new InvalidOperationException($"Insufficient stock for product variant ID {productDto.ProductVariantId}. Available: {productVariant.QuantityInStock}, requested: {productDto.Quantity}.");
+				}
+			}
+			#endregion
+
+
 			foreach (var productDto in OrderAddDto.Products)
 			{
 				var orderProduct = new OrderProduct
 				{
-					// Set the OrderId to associate this product with the order
 					OrderId = orderModel.OrderId, // Make sure OrderId is available here; set after order save
-					ProductId = productDto.ProductId,
+					ProductVariantId = productDto.ProductVariantId, // Updated to use ProductVariantId
 					Quantity = productDto.Quantity,
 					PriceAtPurchase = productDto.PriceAtPurchase // Use PriceAtPurchase from DTO
 				};
@@ -41,12 +64,26 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 			}
 
 			_orderRepo.Add(orderModel);
-			_orderRepo.SaveChanges();
+			//_orderRepo.SaveChanges();
 
+			// Ensure OrderId is set correctly after adding the order
 			foreach (var orderProduct in orderModel.OrderProducts)
 			{
 				orderProduct.OrderId = orderModel.OrderId; // Ensure OrderId is set correctly
 			}
+
+			// Update stock for each product variant
+			foreach (var orderProduct in orderModel.OrderProducts)
+			{
+				var productVariant = _productVariantRepo.GetbyID(orderProduct.ProductVariantId); // Updated to use ProductVariantId
+
+				if (productVariant != null)
+				{
+					productVariant.QuantityInStock -= orderProduct.Quantity;
+					_productVariantRepo.Update(productVariant);
+				}
+			}
+			_orderRepo.SaveChanges();
 		}
 
 		public void Delete(int id)

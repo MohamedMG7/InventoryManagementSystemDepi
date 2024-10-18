@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.DAL.Migrations
 {
     [DbContext(typeof(InventoryManagementSystemContext))]
-    [Migration("20241010145249_initialMigration")]
-    partial class initialMigration
+    [Migration("20241018130540_removeProductIdFromOrder")]
+    partial class removeProductIdFromOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("ShoppingCartId", "ProductId");
 
                     b.HasIndex("ProductId");
@@ -57,6 +60,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("CategoryId");
 
@@ -91,6 +97,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("CompanyId");
 
                     b.ToTable("Company");
@@ -114,6 +123,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("OrderId");
 
                     b.HasIndex("UserId");
@@ -126,18 +138,26 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<double>("PriceAtPurchase")
                         .HasColumnType("float");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("OrderId", "ProductVariantId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("orderProducts");
                 });
@@ -163,6 +183,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<string>("PaymentType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("PaymentId");
 
@@ -206,6 +229,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
@@ -243,6 +269,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<decimal>("Weight")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("ProductVariantId");
 
                     b.HasIndex("ProductId");
@@ -272,6 +301,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<double>("TotalCost")
                         .HasColumnType("float");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("PurchaseId");
 
                     b.ToTable("Purchases");
@@ -279,16 +311,10 @@ namespace InventoryManagementSystem.DAL.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.DAL.Data.Models.PurchaseProduct", b =>
                 {
-                    b.Property<int>("PurchaseProductId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PurchaseId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseProductId"));
 
                     b.Property<int>("ProductVariantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PurchaseId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuantityPurchased")
@@ -300,11 +326,12 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<double>("UnitCost")
                         .HasColumnType("float");
 
-                    b.HasKey("PurchaseProductId");
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PurchaseId", "ProductVariantId");
 
                     b.HasIndex("ProductVariantId");
-
-                    b.HasIndex("PurchaseId");
 
                     b.ToTable("PurchaseProducts");
                 });
@@ -322,6 +349,9 @@ namespace InventoryManagementSystem.DAL.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
 
                     b.HasKey("ShoppingCartId");
 
@@ -406,6 +436,9 @@ namespace InventoryManagementSystem.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -447,6 +480,20 @@ namespace InventoryManagementSystem.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -590,15 +637,19 @@ namespace InventoryManagementSystem.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.Product", "product")
+                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.Product", null)
                         .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("order");
+                    b.Navigation("ProductVariant");
 
-                    b.Navigation("product");
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.DAL.Data.Models.Payment", b =>

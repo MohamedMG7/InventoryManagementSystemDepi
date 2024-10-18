@@ -16,7 +16,7 @@ namespace InventoryManagementSystem.BLL.Manager.OrderProductManager
 		{
 			var orderProductModel = new OrderProduct
 			{
-				ProductId = orderProductAddDto.ProductId,
+				ProductVariantId = orderProductAddDto.ProductVariantId,
 				Quantity = orderProductAddDto.Quantity,
 				PriceAtPurchase = orderProductAddDto.PriceAtPurchase
 			};
@@ -39,10 +39,10 @@ namespace InventoryManagementSystem.BLL.Manager.OrderProductManager
 			var orderProducts = _orderProductRepo.GetAll();
 			var orderProductsList = orderProducts.Select(x => new OrderProductReadDto
 			{
-				ProductId = x.ProductId,
+				ProductId = x.ProductVariantId,
 				PriceAtPurchase = x.PriceAtPurchase,
 				Quantity = x.Quantity,
-				ProductName = x.product.Name,
+				ProductName = x.ProductVariant.product.Name,
 				OrderId = x.OrderId
 			});
 			return orderProductsList;
@@ -53,10 +53,10 @@ namespace InventoryManagementSystem.BLL.Manager.OrderProductManager
 			var paymentModel = _orderProductRepo.GetbyID(OrderId, ProductId);
 			OrderProductReadDto orderProductReadDto = new OrderProductReadDto
 			{
-				ProductId = paymentModel.ProductId,
+				ProductId = paymentModel.ProductVariantId,
 				PriceAtPurchase = paymentModel.PriceAtPurchase,
 				Quantity = paymentModel.Quantity,
-				ProductName = paymentModel.product.Name,
+				ProductName = paymentModel.ProductVariant.product.Name,
 				OrderId = paymentModel.OrderId
 			};
 

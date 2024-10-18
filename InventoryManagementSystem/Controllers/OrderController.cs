@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.BLL.Dto.OrderDtos;
 using InventoryManagementSystem.BLL.Manager.OrderManager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,7 @@ namespace InventoryManagementSystem.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "User")]
 		public ActionResult Add(OrderAddDto orderAddDto)
 		{
 			_orderManager.Add(orderAddDto);

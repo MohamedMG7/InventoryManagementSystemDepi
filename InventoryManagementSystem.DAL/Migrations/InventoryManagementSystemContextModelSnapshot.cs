@@ -135,11 +135,14 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductVariantId")
                         .HasColumnType("int");
 
                     b.Property<double>("PriceAtPurchase")
                         .HasColumnType("float");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -147,9 +150,11 @@ namespace InventoryManagementSystem.DAL.Migrations
                     b.Property<bool>("isDeleted")
                         .HasColumnType("bit");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("OrderId", "ProductVariantId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("orderProducts");
                 });
@@ -629,15 +634,19 @@ namespace InventoryManagementSystem.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.Product", "product")
+                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.Product", null)
                         .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("InventoryManagementSystem.DAL.Data.Models.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("order");
+                    b.Navigation("ProductVariant");
 
-                    b.Navigation("product");
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.DAL.Data.Models.Payment", b =>

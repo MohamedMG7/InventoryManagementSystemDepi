@@ -26,12 +26,12 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public IEnumerable<ProductVariant> GetAll()
 		{
-			return _context.productVariants.AsNoTracking().ToList();
+			return _context.productVariants.Include(p => p.product).AsNoTracking().ToList();
 		}
 
 		public ProductVariant GetbyID(int id)
 		{
-			return _context.productVariants.Find(id);
+			return _context.productVariants.Include(p => p.product).FirstOrDefault(p => p.ProductVariantId == id);
 		}
 
 		public void SaveChanges()

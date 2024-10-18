@@ -6,11 +6,11 @@ namespace InventoryManagementSystem.DAL.Data.Models
         public int OrderId { get; set; }
         public Order order { get; set; }
 
-        public int ProductId { get; set; }
-        public Product product { get; set; }
+        public int ProductVariantId { get; set; } 
+		public ProductVariant ProductVariant { get; set; } 
 
-        
-        public int Quantity { get; set; }
+
+		public int Quantity { get; set; }
         public double PriceAtPurchase { get; set; }
 		public bool isDeleted { get; set; }
 

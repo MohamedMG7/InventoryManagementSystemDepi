@@ -9,9 +9,12 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 	public class PurchaseManager : IPurchaseManager
 	{
 		private readonly IPurchaseRepo _purchaseRepo;
-        public PurchaseManager(IPurchaseRepo purchaseRepo)
+		private readonly IProductVariantRepo _productVariantRepo;
+		
+		public PurchaseManager(IPurchaseRepo purchaseRepo, IProductVariantRepo productVariantRepo)
         {
             _purchaseRepo = purchaseRepo;
+			_productVariantRepo = productVariantRepo;
         }
         public void Add(PurchaseAddDto purchaseAddDto)
 		{
@@ -39,12 +42,28 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 
 			purchaseModel.DateTime = DateTime.Now; 
 			_purchaseRepo.Add(purchaseModel);
-			_purchaseRepo.SaveChanges();
+			//_purchaseRepo.SaveChanges(); just save changes once to keep atomicity all or none // Implicit vs. Explicit Transaction Management
+
 
 			foreach (var purchaseProduct in purchaseModel.purchaseProducts)
 			{
 				purchaseProduct.PurchaseId = purchaseModel.PurchaseId;
 			}
+
+			
+			foreach (var purchaseProduct in purchaseModel.purchaseProducts)
+			{
+				
+				var productVariant = _productVariantRepo.GetbyID(purchaseProduct.ProductVariantId);
+
+				if (productVariant != null)
+				{
+					productVariant.QuantityInStock += purchaseProduct.QuantityPurchased;
+					_productVariantRepo.Update(productVariant);
+				}
+			}
+			_purchaseRepo.SaveChanges();
+			// explicit transaction.begin / transaciton.commit / transaction.rollback 
 		}
 
 		public void Delete(int id)

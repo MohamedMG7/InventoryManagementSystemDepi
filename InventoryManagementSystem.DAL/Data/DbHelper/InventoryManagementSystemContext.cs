@@ -16,7 +16,7 @@ namespace InventoryManagementSystem.DAL.Data.DbHelper
 				.HasKey(sc => new { sc.ShoppingCartId, sc.ProductId });
 
 			modelBuilder.Entity<OrderProduct>()
-				.HasKey(sc => new { sc.OrderId, sc.ProductId });
+				.HasKey(sc => new { sc.OrderId, sc.ProductVariantId});
 
 			modelBuilder.Entity<PurchaseProduct>()
 			   .HasKey(pp => new { pp.PurchaseId, pp.ProductVariantId });

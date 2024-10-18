@@ -43,6 +43,7 @@ namespace InventoryManagementSystem.BLL.Manager.ProductVariantManager
 			{
 				ProductId = x.ProductId,
 				ProductVariantId = x.ProductVariantId,
+				ProductName = x.product.Name,
 				QuantityInStock = x.QuantityInStock,
 				Dimensions = x.Dimensions,
 				Color = x.Color,
@@ -59,6 +60,7 @@ namespace InventoryManagementSystem.BLL.Manager.ProductVariantManager
 			{
 				ProductId = ProductVariantModel.ProductId,
 				ProductVariantId = ProductVariantModel.ProductVariantId,
+				ProductName = ProductVariantModel.product.Name,
 				QuantityInStock = ProductVariantModel.QuantityInStock,
 				Dimensions = ProductVariantModel.Dimensions,
 				Color = ProductVariantModel.Color,
