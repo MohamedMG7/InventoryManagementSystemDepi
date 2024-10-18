@@ -11,5 +11,7 @@ namespace InventoryManagementSystem.BLL.Manager
 		void Update(ProductUpdateDto productupdatedto);
 		void Delete(int id);
 		void SaveChanges();
+		public IEnumerable<ProductReadDto> GetByCategory(int categoryId);
+		public IEnumerable<ProductReadDto> GetByPriceRange(double minPrice, double maxPrice);
 	}
 }

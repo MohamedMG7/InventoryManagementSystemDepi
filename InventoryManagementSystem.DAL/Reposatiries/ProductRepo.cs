@@ -43,5 +43,27 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		{
 			//This Can be empty because and get handled in the BLL as long as the Entity is tracked by the EF
 		}
+
+		#region Filters
+		public IEnumerable<Product> GetByCategory(int categoryId)
+		{
+			return _context.Products
+						   .Include(p => p.company)
+						   .Include(p => p.category)
+						   .Where(p => p.CategoryId == categoryId) // Assuming you have a CategoryId property
+						   .AsNoTracking()
+						   .ToList();
+		}
+
+		public IEnumerable<Product> GetByPriceRange(double minPrice, double maxPrice)
+		{
+			return _context.Products
+						   .Include(p => p.company)
+						   .Include(p => p.category)
+						   .Where(p => p.Price >= minPrice && p.Price <= maxPrice)
+						   .AsNoTracking()
+						   .ToList();
+		}
+		#endregion
 	}
 }

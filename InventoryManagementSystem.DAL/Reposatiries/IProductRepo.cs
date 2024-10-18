@@ -12,5 +12,8 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		void Update(Product product);
 		void Add(Product product);
 		void SaveChanges();
+
+		public IEnumerable<Product> GetByCategory(int categoryId);
+		public IEnumerable<Product> GetByPriceRange(double minPrice, double maxPrice);
 	}
 }

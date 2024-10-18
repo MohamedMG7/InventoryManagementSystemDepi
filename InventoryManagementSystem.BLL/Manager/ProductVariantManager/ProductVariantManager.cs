@@ -85,5 +85,6 @@ namespace InventoryManagementSystem.BLL.Manager.ProductVariantManager
 			_productVariantRepo.Update(productVariantUpdate);
 			_productVariantRepo.SaveChanges();
 		}
+
 	}
 }

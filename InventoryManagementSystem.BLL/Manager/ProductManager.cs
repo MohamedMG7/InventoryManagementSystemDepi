@@ -90,5 +90,41 @@ namespace InventoryManagementSystem.BLL.Manager
 			_productRepo.Update(productUpdate);
 			_productRepo.SaveChanges();
 		}
+
+		#region Filters
+		public IEnumerable<ProductReadDto> GetByPriceRange(double minPrice, double maxPrice)
+		{
+			var products = _productRepo.GetByPriceRange(minPrice, maxPrice);
+			return products.Select(x => new ProductReadDto
+			{
+				ProductId = x.ProductId,
+				Name = x.Name,
+				Description = x.Description,
+				Price = x.Price,
+				ImageUrl = x.ImageUrl,
+				CompanyName = x.company.Name,
+				CategoryName = x.category.Name,
+				MinimumStockToRequest = x.MinimumStockToRequest,
+				DiscountPrecentage = x.DiscountPrecentage,
+			});
+		}
+
+		public IEnumerable<ProductReadDto> GetByCategory(int categoryId)
+		{
+			var products = _productRepo.GetByCategory(categoryId);
+			return products.Select(x => new ProductReadDto
+			{
+				ProductId = x.ProductId,
+				Name = x.Name,
+				Description = x.Description,
+				Price = x.Price,
+				ImageUrl = x.ImageUrl,
+				CompanyName = x.company.Name,
+				CategoryName = x.category.Name,
+				MinimumStockToRequest = x.MinimumStockToRequest,
+				DiscountPrecentage = x.DiscountPrecentage,
+			});
+		}
+		#endregion
 	}
 }

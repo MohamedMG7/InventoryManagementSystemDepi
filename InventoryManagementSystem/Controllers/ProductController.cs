@@ -53,5 +53,30 @@ namespace InventoryManagementSystem.Controllers
             return Ok(productAddDto);
         
         }
-    }
+
+		#region Filters
+		[HttpGet("priceRange")]
+		public ActionResult<IEnumerable<ProductReadDto>> GetByPriceRange([FromQuery] double minPrice, [FromQuery] double maxPrice)
+		{
+			var products = _productManager.GetByPriceRange(minPrice, maxPrice);
+			if (products == null || !products.Any())
+			{
+				return NotFound("No products found in this price range.");
+			}
+			return Ok(products);
+		}
+
+		
+		[HttpGet("category/{categoryId}")]
+		public ActionResult<IEnumerable<ProductReadDto>> GetByCategory(int categoryId)
+		{
+			var products = _productManager.GetByCategory(categoryId);
+			if (products == null || !products.Any())
+			{
+				return NotFound("No products found for this category.");
+			}
+			return Ok(products);
+		}
+		#endregion
+	}
 }

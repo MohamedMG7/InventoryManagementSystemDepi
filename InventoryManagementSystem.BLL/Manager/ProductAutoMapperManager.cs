@@ -5,7 +5,7 @@ using InventoryManagementSystem.DAL.Reposatiries;
 
 namespace InventoryManagementSystem.BLL.Manager
 {
-    public class ProductAutoMapperManager : IProductManager
+    public class ProductAutoMapperManager 
     {
         private readonly IMapper _mapper;
         private readonly IProductRepo _productRepo;
