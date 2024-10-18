@@ -13,17 +13,17 @@ namespace YourProject.MVC.Controllers
     {
         private readonly ICategoryManager _categoryManager;
 
-
         public HomeController(ICategoryManager categorymanager, IProductManager productManager)
         {
             _categoryManager = categorymanager;
         }
 
-
+        [HttpGet]
         public IActionResult Index()
         {
-            var categories =  _categoryManager.GetAll().ToList(); 
+            var categories = _categoryManager.GetAll().ToList();
             return View(categories);
         }
     }
 }
+

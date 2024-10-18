@@ -14,12 +14,14 @@ namespace InventoryManagementSystem.Controllers
             _accountManager = accountManager;
         }
 
-        // Register action for MVC
+
         [HttpGet]
+        [Route("Account/Register")]
         public IActionResult Register()
         {
             return View();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterDto registerDto)
@@ -33,7 +35,7 @@ namespace InventoryManagementSystem.Controllers
             if (result.Succeeded)
             {
                 // Redirect to the login page or home page after successful registration
-                return RedirectToAction("Login");
+                return RedirectToAction("Index","Home");
             }
 
             // Add the errors to the model state
@@ -48,6 +50,7 @@ namespace InventoryManagementSystem.Controllers
 
         // Login action for MVC
         [HttpGet]
+        [Route("Account/Login")]
         public IActionResult Login()
         {
             return View();
@@ -63,7 +66,7 @@ namespace InventoryManagementSystem.Controllers
                 if (result.Succeeded)
                 {
                     // Redirect to the home page after successful login
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index","Home");
                 }
                 else
                 {

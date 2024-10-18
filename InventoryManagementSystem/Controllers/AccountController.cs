@@ -1,67 +1,92 @@
 ﻿using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.BLL.Manager.AccountManager;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace InventoryManagementSystem.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AccountController : ControllerBase
-	{
-		private readonly IAccountManager _accountManager;
+    public class AccountController : Controller
+    {
+        private readonly IAccountManager _accountManager;
 
-		public AccountController(IAccountManager accountManager)
-		{
-			_accountManager = accountManager;
-		}
+        public AccountController(IAccountManager accountManager)
+        {
+            _accountManager = accountManager;
+        }
 
-		[HttpPost("register")]
-		public async Task<IActionResult> Register([FromBody] UserRegisterDto registerDto)
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+        // GET: Account/Register
+        [HttpGet]
+        [Route("Account/Register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
 
-			var result = await _accountManager.RegisterUser(registerDto);
-			if (result.Succeeded)
-			{
-				return Ok(new { Message = "User registered successfully!" });
-			}
+        // POST: Account/Register
+        [HttpPost]
+        [Route("Account/Register")]
+        public async Task<IActionResult> Register(UserRegisterDto registerDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(registerDto); // Return the view with validation errors
+            }
 
-			// Return the errors if the registration failed
-			foreach (var error in result.Errors)
-			{
-				ModelState.AddModelError(string.Empty, error.Description);
-			}
-			return BadRequest(ModelState);
-		}
-        [HttpPost("Login")]
+            var result = await _accountManager.RegisterUser(registerDto);
+            if (result.Succeeded)
+            {
+                // Redirect to the login page after successful registration
+                return RedirectToAction("Login");
+            }
+
+            // Add the errors to the model state
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            // Return the view with errors
+            return View(registerDto);
+        }
+
+        // GET: Account/Login
+        [HttpGet]
+        [Route("Account/Login")]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Account/Login
+        [HttpPost]
+        [Route("Account/Login")]
         public async Task<IActionResult> Login(UserLoginDto loginDto)
         {
-            if (ModelState.IsValid) // Check if the model is valid
+            if (ModelState.IsValid)
             {
                 var result = await _accountManager.LoginUser(loginDto);
 
                 if (result.Succeeded)
                 {
-                    return Ok(new { Message = "User logged in successfully!" });
+                    // Redirect to the home page after successful login
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError(string.Empty, "Invalid username or password.");
                 }
             }
 
-            return BadRequest(ModelState); // Return any validation errors
+            return View(loginDto); // Return the view with validation errors
         }
 
-        [HttpPost("Logout")]
+        // POST: Account/Logout
+        [HttpPost]
+        [Route("Account/Logout")]
         public async Task<IActionResult> Logout()
         {
             await _accountManager.LogoutUser();
-            return Ok(new { Message = "User logged out successfully!" });
+            return RedirectToAction("Login"); // Redirect to the login page after logout
         }
     }
 }
