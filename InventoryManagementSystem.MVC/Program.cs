@@ -19,6 +19,7 @@ using InventoryManagementSystem.DAL.Data.DbHelper;
 using InventoryManagementSystem.DAL.Reposatiries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace InventoryManagementSystem.MVC
 {
