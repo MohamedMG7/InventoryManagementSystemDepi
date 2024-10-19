@@ -101,16 +101,10 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 			var audience = _configuration["Jwt:Audience"];
 			var SecretKeyByte = Encoding.ASCII.GetBytes(SecretKeyString);
 			SecurityKey securityKey = new SymmetricSecurityKey(SecretKeyByte);
-			
 
 			//Combind SecretKey , HasingAlgorithm (SigningCredentials)
 			SigningCredentials signingCredential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-			
 			DateTime tokenExpiration = RememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(2);
-
-			
-
 			JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
 			(
 				claims: claims,
@@ -122,9 +116,6 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 			
 			JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 			string token = handler.WriteToken(jwtSecurityToken);
-
-			
-
 			return token;
 		}
 
