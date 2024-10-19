@@ -88,7 +88,7 @@ namespace InventoryManagementSystem.Controllers
         // POST: Account/Logout
         [HttpPost]
         [Route("Account/Logout")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutUser()
         {
             await _signInManager.SignOutAsync();
             HttpContext.Session.Clear(); 
