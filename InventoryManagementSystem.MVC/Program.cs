@@ -1,4 +1,4 @@
-using InventoryManagementSystem.BLL.AutoMapper;
+﻿using InventoryManagementSystem.BLL.AutoMapper;
 using InventoryManagementSystem.BLL.Manager;
 using InventoryManagementSystem.BLL.Manager.UserManager;
 using InventoryManagementSystem.BLL.Manager.ShoppingCartManager;
@@ -43,6 +43,12 @@ namespace InventoryManagementSystem.MVC
             builder.Services.AddDbContext<InventoryManagementSystemContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configure session timeout
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(30);
+                options.Cookie.HttpOnly = true;
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -61,6 +67,9 @@ namespace InventoryManagementSystem.MVC
 
             app.UseRouting();
 
+            // Enable session management
+            app.UseSession();
+
             app.UseAuthentication(); // Enable authentication
             app.UseAuthorization();
 
@@ -73,7 +82,7 @@ namespace InventoryManagementSystem.MVC
 
         private static void RegisterServices(IServiceCollection services)
         {
-            // Repository and Manager Registrations
+            // Register repositories and managers
             services.AddScoped<IProductRepo, ProductRepo>();
             services.AddScoped<IProductManager, ProductManager>();
 

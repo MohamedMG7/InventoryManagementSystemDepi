@@ -14,41 +14,39 @@
     <!-- Custom Header with Search and Icons -->
     <header>
         <div class="container">
-
-            <div class="right-menu">
-                <a href="/Account/Login" class="btn btn-outline-primary me-2">Login</a>
-                <a href="/Account/Register" class="btn btn-primary">Register</a>
-                <a href="" class="btn btn-primary">Details</a>
-            </div>
-            <div class="left-menu">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input class="search" type="text" placeholder="search">
-            </div>
-            <div>
-                <i class="fa-solid fa-cart-shopping"></i>
-                <i class="fa-solid fa-user"></i>
-                <i class="fa-solid fa-heart"></i>
-            </div>
-
+            <ul class="navbar-nav">
+                @if (User.Identity.IsAuthenticated == false)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Welcome @User.Identity.Name</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+                    </li>
+                }
         </div>
     </header>
+
+
 
     <!-- Custom Navigation Menu -->
     <nav>
         <div class="container">
             <ul class="links">
-                <a href="">
-                <li>HOME</li></a>
-                <a href="">
-                <li>ABOUT</li></a>
-                <a href="">
-                <li>SHOP</li></a>
-                <a href="">
-                <li>CATEGORIES</li></a>
-                <a href="">
-                <li>NEW ARRIVALS</li></a>
-                <a href="">
-                <li>CONTACT</li></a>
+                <li><a href="#landing">HOME</a></li>
+                <li><a href="#aboutus">ABOUT</a></li>
+                <li><a href="#">SHOP</a></li>
+                <li><a href="#category">CATEGORIES</a></li>
+                <li><a href="#contactus">CONTACT</a></li>
             </ul>
         </div>
     </nav>
@@ -73,8 +71,8 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 }
-

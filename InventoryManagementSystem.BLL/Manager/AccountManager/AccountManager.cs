@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.DAL.Data.Models;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -19,6 +20,11 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 
         public async Task<SignInResult> LoginUser(UserLoginDto loginDto)
         {
+            if (loginDto == null)
+            {
+                return SignInResult.Failed;
+            }
+
             var userModel = await _userManager.FindByNameAsync(loginDto.Email);
             if (userModel != null)
             {
@@ -26,12 +32,12 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
                 if (isPasswordValid)
                 {
                     await _signInManager.SignInAsync(userModel, loginDto.RememberMe);
-                    return SignInResult.Success; 
+                    return SignInResult.Success;
                 }
             }
-
-            return SignInResult.Failed; 
+            return SignInResult.Failed;
         }
+
 
 
         public async Task<IdentityResult> RegisterUser(UserRegisterDto registerDto)
@@ -50,6 +56,7 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 
             // Create the user with the password
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+            await _signInManager.SignInAsync(user, false);
             return result; // Return the IdentityResult
         }
 

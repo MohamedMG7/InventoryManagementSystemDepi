@@ -50,6 +50,7 @@ namespace InventoryManagementSystem.BLL.Manager.CartProductManager
 		public CartProductReadDto GetbyId(int ShoppingCartid, int ProductId)
 		{
 			var cartProductsModel = _cartProductRepo.GetbyID(ShoppingCartid, ProductId);
+			
 			CartProductReadDto cartProductReadDto = new CartProductReadDto
 			{
 				ProductId = cartProductsModel.ProductId,
