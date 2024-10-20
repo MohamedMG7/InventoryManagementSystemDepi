@@ -12,11 +12,10 @@ using InventoryManagementSystem.BLL.Manager.ProductVariantManager;
 using InventoryManagementSystem.BLL.Manager.CartProductManager;
 using InventoryManagementSystem.BLL.Manager.AccountManager;
 using InventoryManagementSystem.DAL.Data.Models;
-using InventoryManagementSystem.DAL.Reposatiries; 
+using InventoryManagementSystem.DAL.Reposatiries;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using InventoryManagementSystem.DAL.Data.DbHelper;
-using InventoryManagementSystem.DAL.Reposatiries;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -54,6 +53,26 @@ namespace InventoryManagementSystem.MVC
                 options.Cookie.HttpOnly = true;
             });
 
+            // Configure JWT authentication
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -66,33 +85,21 @@ namespace InventoryManagementSystem.MVC
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts(); // Use HSTS in production
             }
-            //builder.Services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //.AddJwtBearer(options =>
-            //{
-            //    options.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true,
-            //    };
-            //});
-
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication(); // Enable authentication
+            app.UseAuthorization(); // Enable authorization
+
+
             // Enable session management
             app.UseSession();
 
             app.UseAuthentication(); // Enable authentication
-            app.UseAuthorization();
+            app.UseAuthorization();  // Enable authorization
 
             app.MapControllerRoute(
                 name: "default",
@@ -100,7 +107,6 @@ namespace InventoryManagementSystem.MVC
 
             app.Run();
         }
-
 
         private static void RegisterServices(IServiceCollection services)
         {
@@ -138,8 +144,6 @@ namespace InventoryManagementSystem.MVC
             services.AddScoped<ICartProductManager, CartProductManager>();
             services.AddScoped<ICartProductRepo, CartProductRepo>();
 
-            services.AddScoped<IAccountManager, AccountManager>();
-            services.AddScoped<IAccountManager, AccountManager>();
             services.AddScoped<IAccountManager, AccountManager>();
         }
     }

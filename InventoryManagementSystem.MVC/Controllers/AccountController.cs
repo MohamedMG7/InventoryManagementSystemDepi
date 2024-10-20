@@ -1,5 +1,7 @@
 ﻿using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.BLL.Manager.AccountManager;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -71,6 +73,8 @@ namespace InventoryManagementSystem.Controllers
             return View(loginDto);
         }
 
+
+
         // POST: /Account/Logout
         [HttpPost]
         [Route("Account/Logout")]
@@ -78,9 +82,13 @@ namespace InventoryManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _accountManager.LogoutUser();
             HttpContext.Session.Remove("JWT");
-            return RedirectToAction("Index", "Home");
+            await HttpContext.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Logout", "Account"); 
         }
+
+
+
     }
 }
