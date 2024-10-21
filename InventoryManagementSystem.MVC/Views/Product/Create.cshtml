@@ -1,0 +1,90 @@
+﻿@model InventoryManagementSystem.BLL.Dto.ProductAddDto
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Create New Product</h2>
+
+    <form asp-action="Create" method="post" class="row g-3">
+
+        <!-- Product Name -->
+        <div class="col-md-6">
+            <label for="Name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="Name" name="Name" asp-for="Name" placeholder="Enter product name" required>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="col-md-6">
+            <label for="Description" class="form-label">Description</label>
+            <textarea class="form-control" id="Description" name="Description" asp-for="Description" placeholder="Enter product description" rows="3"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <!-- Price -->
+        <div class="col-md-6">
+            <label for="Price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="Price" name="Price" asp-for="Price" placeholder="Enter price" required>
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <!-- Image URL -->
+        <div class="col-md-6">
+            <label for="ImageUrl" class="form-label">Image URL</label>
+            <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" asp-for="ImageUrl" placeholder="Enter image URL">
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <!-- Company -->
+        <div class="col-md-6">
+            <label for="CompanyId" class="form-label">Company</label>
+            <select class="form-select" id="CompanyId" name="CompanyId" asp-for="CompanyId">
+                <option selected disabled>Choose company...</option>
+                @foreach (var company in ViewBag.companies)
+                {
+                    <option value="@company.CompanyId">@company.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CompanyId" class="text-danger"></span>
+        </div>
+
+        <!-- Category -->
+        <div class="col-md-6">
+            <label for="CategoryId" class="form-label">Category</label>
+            <select class="form-select" id="CategoryId" name="CategoryId" asp-for="CategoryId">
+                <option selected disabled>Choose category...</option>
+                @foreach (var category in ViewBag.categories)
+                {
+                    <option value="@category.CategoryId">@category.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <!-- Minimum Stock to Request -->
+        <div class="col-md-6">
+            <label for="MinimumStockToRequest" class="form-label">Minimum Stock To Request</label>
+            <input type="number" class="form-control" id="MinimumStockToRequest" name="MinimumStockToRequest" asp-for="MinimumStockToRequest">
+            <span asp-validation-for="MinimumStockToRequest" class="text-danger"></span>
+        </div>
+
+        <!-- Discount Percentage -->
+        <div class="col-md-6">
+            <label for="DiscountPrecentage" class="form-label">Discount Percentage</label>
+            <input type="number" class="form-control" id="DiscountPrecentage" name="DiscountPrecentage" asp-for="DiscountPrecentage">
+            <span asp-validation-for="DiscountPrecentage" class="text-danger"></span>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-12 text-center mt-4">
+            <button type="submit" class="btn btn-primary">Create Product</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

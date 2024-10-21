@@ -7,7 +7,7 @@ using System.Diagnostics;
 using InventoryManagementSystem.BLL.Manager.CategoryManager;
 using InventoryManagementSystem.BLL.Manager;
 
-namespace YourProject.MVC.Controllers
+namespace InventoryManagementSystem.MVC.Controllers
 {
     public class HomeController : Controller
     {
@@ -26,4 +26,3 @@ namespace YourProject.MVC.Controllers
         }
     }
 }
-

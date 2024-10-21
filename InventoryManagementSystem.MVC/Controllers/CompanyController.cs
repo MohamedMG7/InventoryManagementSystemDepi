@@ -33,18 +33,20 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Route("Company/Create")]
         public IActionResult Create()
         {
             return View(); 
         }
 
         [HttpPost]
+        [Route("Company/Create")]
         public IActionResult Create(CompanyAddDto companyAddDto)
         {
             if (ModelState.IsValid)
             {
                 _companyManager.Add(companyAddDto);
-                return RedirectToAction("Index"); 
+                return RedirectToAction("Index", "Home");
             }
             return View(companyAddDto); 
         }

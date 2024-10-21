@@ -50,6 +50,7 @@
     </div>
 </section>
 <!-- End About Us Section -->
+
 <!-- Start Category Section -->
 <section class="category">
     <div class="container">
@@ -61,10 +62,15 @@
                 {
                     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                         <div class="card">
-                            <img class="card-img-top" src="@category.Name" alt="@category.Name">
+                            <!-- Displaying Category Image and Name -->
+                            <img class="card-img-top"  alt="@category.Name"> <!-- Assume there's an ImageUrl in CategoryReadDto -->
                             <div class="card-body">
                                 <h5 class="card-title">@category.Name</h5>
-                                <a href="@Url.Action("CategoryDetails", "Category", new { id = category.CategoryId })" class="category-link">Shop Now</a>
+
+                                <!-- Link to View Products in this Category -->
+                                <a asp-controller="Product" asp-action="ProductsByCategory" asp-route-categoryId="@category.CategoryId">
+                                    View Products in @category.Name
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -79,8 +85,9 @@
         </div>
     </div>
 </section>
-
 <!-- End Category Section -->
+
+
 <!-- Start Footer -->
 <footer>
     <div class="container">

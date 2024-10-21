@@ -1,0 +1,41 @@
+﻿@model InventoryManagementSystem.BLL.Dto.ProductReadDto
+
+<div class="container">
+    <h1>@Model.Name</h1>
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid">
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h3>Description</h3>
+            <p>@Model.Description</p>
+
+            <p><strong>Price:</strong> $@Model.Price</p>
+            <p><strong>Company:</strong> @Model.CompanyName</p>
+            <p><strong>Category:</strong> @Model.CategoryName</p>
+
+            @if (Model.MinimumStockToRequest.HasValue)
+            {
+                <p><strong>Minimum Stock to Request:</strong> @Model.MinimumStockToRequest</p>
+            }
+
+            @if (Model.DiscountPrecentage.HasValue && Model.DiscountPrecentage > 0)
+            {
+                <p><strong>Discount:</strong> @Model.DiscountPrecentage% off</p>
+            }
+            else
+            {
+                <p><strong>Discount:</strong> No discount available</p>
+            }
+
+            <!-- Add to Cart Button -->
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="productId" value="@Model.ProductId" />
+                <button type="submit" class="btn btn-success">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>

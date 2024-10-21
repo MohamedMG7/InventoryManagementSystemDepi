@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using InventoryManagementSystem.BLL.Manager;
 using InventoryManagementSystem.BLL.Dto;
-using System.Collections.Generic;
+using InventoryManagementSystem.BLL.Manager.CategoryManager;
+using InventoryManagementSystem.BLL.Manager.CompanyManager;
 
 namespace InventoryManagementSystem.Controllers
 {
@@ -9,30 +10,38 @@ namespace InventoryManagementSystem.Controllers
     public class ProductController : Controller
     {
         private readonly IProductManager _productManager;
+        private readonly ICategoryManager _categoryManager; // Inject category service
+        private readonly ICompanyManager _companyManager; // Inject company service
 
-        public ProductController(IProductManager productManager)
+        public ProductController(IProductManager productManager, ICategoryManager categoryManager, ICompanyManager companyManager)
         {
             _productManager = productManager;
+            _categoryManager = categoryManager;
+            _companyManager = companyManager;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        // GET: /Product/Create
+        [HttpGet("/Product/Create")]
+        public IActionResult Create()
         {
-            var products = _productManager.GetAll();
-            return View(products);
+            // Fetch categories and companies
+            ViewBag.categories = _categoryManager.GetAll(); // Fetch all categories
+            ViewBag.companies = _companyManager.GetAll(); // Fetch all companies
+
+            return View();
         }
 
-
-
-
-        [HttpGet]
-        [Route("Category/{categoryId}/Products")]
-        public IActionResult ProductsByCategory(int categoryId)
+        // POST: /Product/Create
+        [HttpPost("/Product/Create")]
+        public IActionResult Create(ProductAddDto productAddDto)
         {
-            var products = _productManager.GetByCategory(categoryId);
-            return View(products);
+            if (ModelState.IsValid)
+            {
+                _productManager.Add(productAddDto);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(productAddDto);
         }
-
 
         [HttpGet]
         [Route("Details/{id}")]
@@ -46,22 +55,30 @@ namespace InventoryManagementSystem.Controllers
             return View(product);
         }
 
+
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Index()
         {
-            return View();
+            var products = _productManager.GetAll();
+            return View(products);
         }
 
-        [HttpPost]
-        public IActionResult Create(ProductAddDto productAddDto)
+
+
+        [HttpGet]
+        [Route("Category/{categoryId}/Products")]
+        public IActionResult ProductsByCategory(int categoryId)
         {
-            if (ModelState.IsValid)
+            var products = _productManager.GetByCategory(categoryId);
+            if (products == null || !products.Any())
             {
-                _productManager.Add(productAddDto);
-                return RedirectToAction("Index");
+                return View(new List<ProductReadDto>()); // Return empty list if no products are found
             }
-            return View(productAddDto);
+            return View(products.ToList()); // Convert to List before passing to the view
         }
+
+
+
 
         [HttpPost]
         [Route("Delete/{id}")]
