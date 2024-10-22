@@ -12,6 +12,7 @@ using InventoryManagementSystem.BLL.Manager.OrderManager;
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.BLL.Manager.OrderProductManager;
 using InventoryManagementSystem.BLL.Manager.CompanyManager;
+using InventoryManagementSystem.BLL.Manager.RoleManager;
 using InventoryManagementSystem.BLL.Manager.ProductVariantManager;
 using InventoryManagementSystem.BLL.Manager.CartProductManager;
 using InventoryManagementSystem.BLL.Manager.AccountManager;
@@ -71,7 +72,9 @@ namespace InventoryManagementSystem
 
 			builder.Services.AddScoped<IAccountManager, AccountManager>();
 
-			builder.Services.AddIdentity<User, IdentityRole<int>>()
+            builder.Services.AddScoped<IRoleManager, RoleManager>();
+
+            builder.Services.AddIdentity<User, IdentityRole<int>>()
 			.AddEntityFrameworkStores<InventoryManagementSystemContext>()
 			.AddDefaultTokenProviders();
 
