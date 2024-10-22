@@ -16,9 +16,6 @@ using InventoryManagementSystem.DAL.Reposatiries;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using InventoryManagementSystem.DAL.Data.DbHelper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace InventoryManagementSystem.MVC
 {
@@ -34,7 +31,7 @@ namespace InventoryManagementSystem.MVC
             // Add AutoMapper
             builder.Services.AddAutoMapper(config => config.AddProfile(new MappingProfile()));
 
-            // Add Repositories and Managers
+            // Register repositories and managers
             RegisterServices(builder.Services);
 
             // Configure Identity
@@ -49,28 +46,18 @@ namespace InventoryManagementSystem.MVC
             // Configure session timeout
             builder.Services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(30);
-                options.Cookie.HttpOnly = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(30); // Adjusted session timeout to 30 minutes
+                options.Cookie.HttpOnly = true; // Ensure the session cookie is HTTP-only
             });
 
-            // Configure JWT authentication
-            builder.Services.AddAuthentication(options =>
+            // Configure Cookie-based authentication
+            builder.Services.ConfigureApplicationCookie(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    ValidAudience = builder.Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                };
+                options.LoginPath = "/Account/Login"; // Redirect to login if not authenticated
+                options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect to access denied page if unauthorized
+                options.ExpireTimeSpan = TimeSpan.FromDays(7); // Cookie expires after 7 days
+                options.SlidingExpiration = true; // Extend cookie expiration on activity
+                options.Cookie.HttpOnly = true; // Ensure cookie cannot be accessed by JavaScript
             });
 
             var app = builder.Build();
@@ -91,16 +78,14 @@ namespace InventoryManagementSystem.MVC
 
             app.UseRouting();
 
-            app.UseAuthentication(); // Enable authentication
-            app.UseAuthorization(); // Enable authorization
-
+            // Enable authentication and authorization
+            app.UseAuthentication(); // Use Cookie-based authentication
+            app.UseAuthorization();  // Ensure user has required access rights
 
             // Enable session management
             app.UseSession();
 
-            app.UseAuthentication(); // Enable authentication
-            app.UseAuthorization();  // Enable authorization
-
+            // Map default routes for controllers
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -108,9 +93,9 @@ namespace InventoryManagementSystem.MVC
             app.Run();
         }
 
+        // Register services: repositories and managers
         private static void RegisterServices(IServiceCollection services)
         {
-            // Register repositories and managers
             services.AddScoped<IProductRepo, ProductRepo>();
             services.AddScoped<IProductManager, ProductManager>();
 
@@ -144,7 +129,7 @@ namespace InventoryManagementSystem.MVC
             services.AddScoped<ICartProductManager, CartProductManager>();
             services.AddScoped<ICartProductRepo, CartProductRepo>();
 
-            services.AddScoped<IAccountManager, AccountManager>();
+           services.AddScoped<IAccountManager, AccountManager>();
         }
     }
 }

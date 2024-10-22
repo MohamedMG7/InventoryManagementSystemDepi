@@ -69,7 +69,7 @@ namespace InventoryManagementSystem
 			builder.Services.AddScoped<ICartProductManager, CartProductManager>();
 			builder.Services.AddScoped<ICartProductRepo, CartProductRepo>();
 
-			builder.Services.AddScoped<IAccountManager, AccountManager>();
+			//builder.Services.AddScoped<IAccountManager, AccountManager>();
 
 			builder.Services.AddIdentity<User, IdentityRole<int>>()
 			.AddEntityFrameworkStores<InventoryManagementSystemContext>()

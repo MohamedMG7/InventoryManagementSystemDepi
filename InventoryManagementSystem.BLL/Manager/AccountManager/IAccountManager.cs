@@ -6,8 +6,12 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 {
 	public interface IAccountManager
 	{
-		Task<IdentityResult> RegisterUser(UserRegisterDto registerDto);
-		Task<string> LoginUser(UserLoginDto loginDto);
-		Task LogoutUser();
-	}
+        //	Task<IdentityResult> RegisterUser(UserRegisterDto registerDto);
+        //	Task<string> LoginUser(UserLoginDto loginDto);
+        //	Task LogoutUser();
+
+        Task<string> LoginUser(UserLoginDto loginDto, bool rememberMe);
+        Task<IdentityResult> RegisterUser(UserRegisterDto registerDto);
+        Task LogoutUser();
+    }
 }
