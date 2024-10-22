@@ -10,5 +10,10 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 		//ReadOrderWithProductsDto GetOrderWithProductsData(int OrderId);
 		void Delete(int id);
 		void SaveChanges();
-	}
+
+        #region Reports
+        IEnumerable<OrderReadDto> GetOrdersByDay(DateTime date);
+        #endregion
+
+    }
 }

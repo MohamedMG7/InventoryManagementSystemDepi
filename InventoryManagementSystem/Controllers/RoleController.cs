@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="SuperAdmin")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleManager _roleManager;

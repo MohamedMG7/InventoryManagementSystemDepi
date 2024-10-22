@@ -127,5 +127,23 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 		{
 			_orderRepo.SaveChanges();
 		}
-	}
+
+        #region Reports
+        public IEnumerable<OrderReadDto> GetOrdersByDay(DateTime date)
+        {
+            // Get all orders and filter by the provided date
+            var orders = _orderRepo.GetAll()
+                                   .Where(o => o.Date.Date == date.Date)
+                                   .Select(x => new OrderReadDto
+                                   {
+                                       OrderId = x.OrderId,
+                                       TrackingNumber = x.TrackingNumber,
+                                       UserId = x.UserId,
+                                       Date = x.Date
+                                   });
+
+            return orders;
+        }
+        #endregion
+    }
 }
