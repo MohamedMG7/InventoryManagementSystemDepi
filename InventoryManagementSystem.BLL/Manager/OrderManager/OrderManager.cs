@@ -13,10 +13,12 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 	{
 		private readonly IOrderRepo _orderRepo;
 		private readonly IProductVariantRepo _productVariantRepo;
-		public OrderManager(IOrderRepo orderRepo, IProductVariantRepo productVariantRepo)
+		private readonly IPaymentRepo _paymentRepo;
+		public OrderManager(IOrderRepo orderRepo, IProductVariantRepo productVariantRepo, IPaymentRepo paymentRepo)
         {
             _orderRepo = orderRepo;
-			_productVariantRepo = productVariantRepo;	
+			_productVariantRepo = productVariantRepo;
+			_paymentRepo = paymentRepo;
         }
 
 		
@@ -83,7 +85,23 @@ namespace InventoryManagementSystem.BLL.Manager.OrderManager
 					_productVariantRepo.Update(productVariant);
 				}
 			}
+
 			_orderRepo.SaveChanges();
+
+			var paymentModel = new Payment
+			{
+				PaymentType = OrderAddDto.PaymentType,
+				PaymentStatus = OrderAddDto.PaymentStatus,
+				OrderId = orderModel.OrderId,
+				PaymentTime = TimeOnly.FromDateTime(DateTime.Now)
+			};
+
+			_paymentRepo.Add(paymentModel);
+			_paymentRepo.SaveChanges(); // Save payment changes
+
+			// Save all changes
+			
+			//_paymentRepo.SaveChanges();
 		}
 
 		public void Delete(int id)

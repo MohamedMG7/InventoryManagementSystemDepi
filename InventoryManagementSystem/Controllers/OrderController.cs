@@ -1,5 +1,7 @@
 ﻿using InventoryManagementSystem.BLL.Dto.OrderDtos;
+using InventoryManagementSystem.BLL.Dto.PaymentDtos;
 using InventoryManagementSystem.BLL.Manager.OrderManager;
+using InventoryManagementSystem.BLL.Manager.PaymentManager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +13,11 @@ namespace InventoryManagementSystem.Controllers
 	public class OrderController : ControllerBase
 	{
 		private readonly IOrderManager _orderManager;
-		public OrderController(IOrderManager orderManager)
+		private readonly IPaymentManager _paymentManager;
+		public OrderController(IOrderManager orderManager, IPaymentManager paymentManager)
 		{
 			_orderManager = orderManager;
+			_paymentManager = paymentManager;
 		}
 
 		[HttpGet]
@@ -38,11 +42,11 @@ namespace InventoryManagementSystem.Controllers
 		}
 
 		[HttpPost]
-		[Authorize(Roles = "User")]
+		//[Authorize(Roles = "User")]
 		public ActionResult Add(OrderAddDto orderAddDto)
 		{
 			_orderManager.Add(orderAddDto);
-			return Ok(orderAddDto);
+			return Ok();
 
 		}
 

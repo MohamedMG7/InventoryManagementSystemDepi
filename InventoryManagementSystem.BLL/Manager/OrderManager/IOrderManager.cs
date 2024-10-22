@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.BLL.Dto.OrderDtos;
+using InventoryManagementSystem.BLL.Dto.PaymentDtos;
 
 namespace InventoryManagementSystem.BLL.Manager.OrderManager
 {
