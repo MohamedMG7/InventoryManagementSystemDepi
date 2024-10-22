@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NETCore.MailKit.Core;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -17,12 +18,13 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         private readonly RoleManager<IdentityRole<int>> _roleManager;
 		private readonly IConfiguration _configuration;
 
-		public AccountManager(UserManager<User> userManager,SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)  
+        public AccountManager(UserManager<User> userManager,SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)  
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _configuration = configuration;
+
         }
 
         //public async Task<string> LoginUser(UserLoginDto loginDto) // we will return a string (Token) To The User
@@ -173,6 +175,7 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         {
             await _signInManager.SignOutAsync();
         }
+
 
     }
 }

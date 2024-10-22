@@ -8,9 +8,6 @@ namespace InventoryManagementSystem.BLL.Dto.ShoopinhCartDto
 {
     public class ShoppingCartAddDto
     {
-
         public int UserId { get; set; }  
-        
-
     }
 }

@@ -71,5 +71,6 @@ namespace InventoryManagementSystem.MVC.Controllers
             await _accountManager.LogoutUser();
             return RedirectToAction("Login"); // Redirect to login after logout
         }
+
     }
 }

@@ -13,5 +13,8 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         Task<string> LoginUser(UserLoginDto loginDto, bool rememberMe);
         Task<IdentityResult> RegisterUser(UserRegisterDto registerDto);
         Task LogoutUser();
+
+        //Task<string> SendResetPasswordCode(string email);
+        //Task<IdentityResult> ResetPassword(string email, string token, string newPassword);
     }
 }
