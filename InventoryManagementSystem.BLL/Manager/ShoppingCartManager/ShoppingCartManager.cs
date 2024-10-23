@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.BLL.Dto.ShoopinhCartDto;
+using InventoryManagementSystem.BLL.Dto.ShoppingCartDto;
 using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.DAL.Reposatiries;
@@ -14,7 +15,21 @@ namespace InventoryManagementSystem.BLL.Manager.ShoppingCartManager
         {
            _shoppingCartRepo = shoppingCartRepo;
         }
-        void IShoppingCartManger.Add(ShoppingCartAddDto ShoppingAddDto)
+
+		public IEnumerable<AdminShoppingCartReadDto> GetAllForAdmin()
+		{
+			var ShoppingCarts = _shoppingCartRepo.GetAllForAdmin();
+			var ShoppingCartsList = ShoppingCarts.Select(x => new AdminShoppingCartReadDto
+			{
+				CartId = x.ShoppingCartId,
+				UserId = x.UserId,
+				TotalPrice = x.TotalPrice,
+                isDeleted = x.isDeleted
+			});
+			return ShoppingCartsList;
+		}
+
+		void IShoppingCartManger.Add(ShoppingCartAddDto ShoppingAddDto)
         {
             var shoppingcartModel = new ShoppingCart
             {

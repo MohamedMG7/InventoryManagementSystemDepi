@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.BLL.Dto.ShoopinhCartDto;
+using InventoryManagementSystem.BLL.Dto.ShoppingCartDto;
 
 namespace InventoryManagementSystem.BLL.Manager.ShoppingCartManager
 {
@@ -9,5 +10,6 @@ namespace InventoryManagementSystem.BLL.Manager.ShoppingCartManager
         void Add(ShoppingCartAddDto ShoopingAddDto);
         void Delete(int id);
         void SaveChanges();
-    }
+		IEnumerable<AdminShoppingCartReadDto> GetAllForAdmin();
+	}
 }

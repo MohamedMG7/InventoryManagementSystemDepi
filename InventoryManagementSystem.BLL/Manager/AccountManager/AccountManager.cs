@@ -1,4 +1,5 @@
 ﻿using InventoryManagementSystem.BLL.Dto.UserDtos;
+using InventoryManagementSystem.DAL.Reposatiries;
 using InventoryManagementSystem.DAL.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,13 +17,15 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
         private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
 		private readonly IConfiguration _configuration;
+		private readonly IShoppingCartRepo _shoppingCartRepo;
 
-		public AccountManager(UserManager<User> userManager,SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration)  
+		public AccountManager(UserManager<User> userManager,SignInManager<User> signInManager, RoleManager<IdentityRole<int>> roleManager, IConfiguration configuration, IShoppingCartRepo shoppingCartRepo)  
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _configuration = configuration;
+			_shoppingCartRepo = shoppingCartRepo;
         }
 
         public async Task<string> LoginUser(UserLoginDto loginDto) // we will return a string (Token) To The User
@@ -84,7 +87,15 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 					});
 				}
 			}
-            return result; // Return the IdentityResult
+
+			var shoppingCartModel = new ShoppingCart { 
+				UserId = user.Id,
+			};
+
+			_shoppingCartRepo.Add(shoppingCartModel);
+			_shoppingCartRepo.SaveChanges();
+
+			return result; // Return the IdentityResult
         }
 
         public async Task LogoutUser()

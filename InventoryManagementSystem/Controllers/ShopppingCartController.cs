@@ -1,6 +1,7 @@
 ﻿using InventoryManagementSystem.BLL.Dto.ShoopinhCartDto;
 using InventoryManagementSystem.BLL.Dto.UserDtos;
 using InventoryManagementSystem.BLL.Manager.ShoppingCartManager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,14 @@ namespace InventoryManagementSystem.Controllers
             return Ok(_shoppingCartManager.GetAll());
         }
 
-        [HttpGet]
+		[HttpGet("GetAllForAdmins")]
+		[Authorize(Roles = "Admin")]
+		public ActionResult<IEnumerable<ShoppingCartReadDto>> GetAllForAdmin()
+		{
+			return Ok(_shoppingCartManager.GetAllForAdmin());
+		}
+
+		[HttpGet]
         [Route("{id}")]
         public ActionResult GetById(int id)
         {

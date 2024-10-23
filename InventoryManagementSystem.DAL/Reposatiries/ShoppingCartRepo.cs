@@ -26,12 +26,22 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 
 		public IEnumerable<ShoppingCart> GetAll()
 		{
+			return _context.ShoppingCarts.AsNoTracking().Where(sc => !sc.isDeleted).ToList();
+		}
+
+		public IEnumerable<ShoppingCart> GetAllForAdmin()
+		{
 			return _context.ShoppingCarts.AsNoTracking().ToList();
 		}
 
 		public ShoppingCart GetbyID(int id)
 		{
 			return _context.ShoppingCarts.Find(id);
+		}
+
+		public ShoppingCart GetByUserId(int userId)
+		{
+			return _context.ShoppingCarts.FirstOrDefault(sc => sc.UserId == userId && !sc.isDeleted);
 		}
 
 		public void SaveChanges()

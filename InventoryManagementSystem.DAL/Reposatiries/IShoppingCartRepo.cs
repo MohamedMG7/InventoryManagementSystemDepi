@@ -11,5 +11,7 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		void Update(ShoppingCart ShoppingCart);
 		void Add(ShoppingCart ShoppingCart);
 		void SaveChanges();
+		ShoppingCart GetByUserId(int userId);
+		IEnumerable<ShoppingCart> GetAllForAdmin();
 	}
 }

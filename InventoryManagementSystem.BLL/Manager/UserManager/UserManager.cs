@@ -8,10 +8,12 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
     public class UserManager : IUserManager
     {
         private readonly IUserRepo _userRepo;
+        private readonly IShoppingCartRepo _shoppingCartRepo;
 
-        public UserManager(IUserRepo userRepo)
+        public UserManager(IUserRepo userRepo, IShoppingCartRepo shoppingCartRepo)
         {
             _userRepo = userRepo;
+            _shoppingCartRepo = shoppingCartRepo;
         }
 
         public void Add(UserAddDto UserAddDto)
@@ -34,8 +36,11 @@ namespace InventoryManagementSystem.BLL.Manager.UserManager
         public void Delete(int id)
         {
             var user = _userRepo.GetbyID(id);
+            var shoppingcart = _shoppingCartRepo.GetByUserId(id);
             if (user != null && !user.isDeleted) {
 				_userRepo.Delete(user);
+				_shoppingCartRepo.Delete(shoppingcart);
+				_shoppingCartRepo.SaveChanges();
 				_userRepo.SaveChanges();
 			}
         }
