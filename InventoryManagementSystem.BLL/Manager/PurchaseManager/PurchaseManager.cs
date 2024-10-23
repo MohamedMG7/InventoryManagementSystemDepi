@@ -3,6 +3,7 @@ using InventoryManagementSystem.BLL.Dto.PurchaseDtos;
 using InventoryManagementSystem.DAL.Reposatiries;
 using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.BLL.Dto.OrderDtos;
+using InventoryManagementSystem.BLL.Dto.PurchaseProductDtos;
 
 namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 {
@@ -86,6 +87,32 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 				DateTime = x.DateTime,
 				PurchaseId = x.PurchaseId,
 			});
+			return purchaseList;
+		}
+
+		public IEnumerable<PurchaseWithProductsReadDto> GetAllPurchasesWithProducts()
+		{
+			var purchases = _purchaseRepo.GetAllPurchasesWithProducts(); // Call the DAL function
+
+			var purchaseList = purchases.Select(p => new PurchaseWithProductsReadDto
+			{
+				PurchaseId = p.PurchaseId,
+				DateTime = p.DateTime,
+				TotalCost = p.TotalCost,
+				Notes = p.Notes,
+				PaymentMethod = p.PaymentMethod,
+				Products = p.purchaseProducts.Select(pp => new PurhcaseProductReadDto
+				{
+					PurchaseId = pp.PurchaseId,
+					ProductVariantId = pp.ProductVariantId,
+					ProductName = pp.ProductVariant.product.Name,
+					ProductProviderName = pp.ProductVariant.product.company.Name,
+					QuantityPurchased = pp.QuantityPurchased,
+					UnitCost = pp.UnitCost,
+					TotalCost = pp.TotalCost
+				}).ToList()
+			});
+
 			return purchaseList;
 		}
 

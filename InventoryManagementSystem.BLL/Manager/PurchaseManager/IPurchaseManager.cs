@@ -1,4 +1,4 @@
-﻿
+﻿using InventoryManagementSystem.BLL.Dto.PurchaseProductDtos;
 using InventoryManagementSystem.BLL.Dto.PurchaseDtos;
 
 namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
@@ -10,5 +10,6 @@ namespace InventoryManagementSystem.BLL.Manager.PurchaseManager
 		void Add(PurchaseAddDto purchaseAddDto);
 		void Delete(int id);
 		void SaveChanges();
+		IEnumerable<PurchaseWithProductsReadDto> GetAllPurchasesWithProducts();
 	}
 }

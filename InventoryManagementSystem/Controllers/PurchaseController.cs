@@ -23,6 +23,13 @@ namespace InventoryManagementSystem.Controllers
 			return Ok(_purchaseManager.GetAll());
 		}
 
+		[HttpGet("GetAllPurchasesWithProducts")]
+		public IActionResult GetAllPurchasesWithProducts()
+		{
+			var purchases = _purchaseManager.GetAllPurchasesWithProducts();
+			return Ok(purchases);
+		}
+
 		[HttpGet]
 		[Route("{id}")]
 		public ActionResult GetById(int id)

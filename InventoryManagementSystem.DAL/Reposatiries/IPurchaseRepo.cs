@@ -10,5 +10,6 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		void Update(Purchase Purchase);
 		void Add(Purchase Purchase);
 		void SaveChanges();
+		IEnumerable<Purchase> GetAllPurchasesWithProducts();
 	}
 }

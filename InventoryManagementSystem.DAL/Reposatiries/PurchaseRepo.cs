@@ -29,6 +29,16 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 			return _context.Purchases.AsNoTracking().ToList();
 		}
 
+		public IEnumerable<Purchase> GetAllPurchasesWithProducts()
+		{
+			return _context.Purchases
+				.Include(p => p.purchaseProducts)
+					.ThenInclude(pp => pp.ProductVariant)
+						.ThenInclude(pv => pv.product)
+							.ThenInclude(p => p.company)
+				.ToList();
+		}
+
 		public Purchase GetbyID(int id)
 		{
 			return _context.Purchases.Find(id);
