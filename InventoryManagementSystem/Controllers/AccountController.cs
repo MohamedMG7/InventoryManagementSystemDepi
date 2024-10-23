@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.Controllers
 				return BadRequest(ModelState);
 			}
 
-			var result = await _accountManager.RegisterUser(registerDto);
+			var result = await _accountManager.RegisterUserr(registerDto);
 			if (result.Succeeded)
 			{
 				return Ok(new { Message = "User registered successfully!" });

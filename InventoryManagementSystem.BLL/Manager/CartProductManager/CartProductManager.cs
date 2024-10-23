@@ -1,77 +1,94 @@
 ﻿using InventoryManagementSystem.DAL.Data.Models;
 using InventoryManagementSystem.BLL.Dto.CartProductDtos;
 using InventoryManagementSystem.DAL.Reposatiries;
-using InventoryManagementSystem.BLL.Dto.OrderDtos;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InventoryManagementSystem.BLL.Manager.CartProductManager
 {
-	public class CartProductManager : ICartProductManager
-	{
-		private readonly ICartProductRepo _cartProductRepo;
+    public class CartProductManager : ICartProductManager
+    {
+        private readonly ICartProductRepo _cartProductRepo;
+
         public CartProductManager(ICartProductRepo cartProductRepo)
         {
             _cartProductRepo = cartProductRepo;
         }
-        public void Add(CartProductAddDto cartproductAddDto)
-		{
-			var cartProductModel = new CartProduct { 
-				ShoppingCartId = cartproductAddDto.ShoppingCartId,
-				ProductId = cartproductAddDto.ProductId,
-				Quantity = cartproductAddDto.Quantity
-			};
-			_cartProductRepo.Add(cartProductModel);
-			_cartProductRepo.SaveChanges();
-		}
 
-		public void Delete(int ShoppingCartid, int ProductId)
-		{
-			var cartProductModel = _cartProductRepo.GetbyID(ShoppingCartid,ProductId);
-			if (cartProductModel != null && !cartProductModel.isDeleted) {
-				_cartProductRepo.Delete(cartProductModel);
-				_cartProductRepo.SaveChanges();
-			}
-			
-		}
+        public void Add(CartProductAddDto cartProductAddDto)
+        {
+            var cartProductModel = new CartProduct
+            {
+                ShoppingCartId = cartProductAddDto.ShoppingCartId,
+                ProductId = cartProductAddDto.ProductId,
+                Quantity = cartProductAddDto.Quantity
+            };
 
-		public IEnumerable<CartProductReadDto> GetAll()
-		{
-			var cartProducts = _cartProductRepo.GetAll();
-			var cartProductsList = cartProducts.Select(x => new CartProductReadDto
-			{
-				ProductId=x.ProductId,
-				Quantity = x.Quantity,
-				ProductName = x.product.Name,
-				ShoppingCartId = x.ShoppingCartId
+            _cartProductRepo.Add(cartProductModel);
+            SaveChanges();
+        }
 
-			});
-			return cartProductsList;
-		}
+        public void Delete(int shoppingCartId, int productId)
+        {
+            var cartProductModel = _cartProductRepo.GetbyID(shoppingCartId, productId);
+            if (cartProductModel != null && !cartProductModel.isDeleted)
+            {
+                _cartProductRepo.Delete(cartProductModel);
+                SaveChanges();
+            }
+            else
+            {
+                // Optionally log or throw an exception
+            }
+        }
 
-		public CartProductReadDto GetbyId(int ShoppingCartid, int ProductId)
-		{
-			var cartProductsModel = _cartProductRepo.GetbyID(ShoppingCartid,ProductId);
-			CartProductReadDto cartProductReadDto = new CartProductReadDto
-			{
-				ProductId = cartProductsModel.ProductId,
-				Quantity = cartProductsModel.Quantity,
-				ProductName = cartProductsModel.product.Name,
-				ShoppingCartId = cartProductsModel.ShoppingCartId
-			};
+        public IEnumerable<CartProductReadDto> GetAll()
+        {
+            var cartProducts = _cartProductRepo.GetAll();
+            return cartProducts.Select(x => new CartProductReadDto
+            {
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                ProductName = x.product.Name,
+                ShoppingCartId = x.ShoppingCartId
+            });
+        }
 
-			return cartProductReadDto;
-		}
+        public CartProductReadDto GetbyId(int shoppingCartId, int productId)
+        {
+            var cartProductModel = _cartProductRepo.GetbyID(shoppingCartId, productId);
+            if (cartProductModel == null)
+            {
+                return null; // Handle the case where the cart product was not found
+            }
 
-		public void SaveChanges()
-		{
-			_cartProductRepo.SaveChanges();
-		}
+            return new CartProductReadDto
+            {
+                ProductId = cartProductModel.ProductId,
+                Quantity = cartProductModel.Quantity,
+                ProductName = cartProductModel.product.Name,
+                ShoppingCartId = cartProductModel.ShoppingCartId
+            };
+        }
 
-		public void Update(CartProductUpdateDto cartproductupdatedto)
-		{
-			var cartProductModel = _cartProductRepo.GetbyID(cartproductupdatedto.ShoppingCartId, cartproductupdatedto.ProductId);
-			cartProductModel.Quantity = cartproductupdatedto.Quantity;
-			_cartProductRepo.Update(cartProductModel);
-			_cartProductRepo.SaveChanges();
-		}
-	}
+        public void Update(CartProductUpdateDto cartProductUpdateDto)
+        {
+            var cartProductModel = _cartProductRepo.GetbyID(cartProductUpdateDto.ShoppingCartId, cartProductUpdateDto.ProductId);
+            if (cartProductModel != null)
+            {
+                cartProductModel.Quantity = cartProductUpdateDto.Quantity;
+                _cartProductRepo.Update(cartProductModel);
+                SaveChanges();
+            }
+            else
+            {
+                // Handle the case where the cart product was not found
+            }
+        }
+
+        public void SaveChanges()
+        {
+            _cartProductRepo.SaveChanges();
+        }
+    }
 }
