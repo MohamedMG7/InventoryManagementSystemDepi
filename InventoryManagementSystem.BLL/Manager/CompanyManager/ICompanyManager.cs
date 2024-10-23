@@ -11,5 +11,6 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 		void Update(CompanyUpdateDto companyupdatedto);
 		void Delete(int id);
 		void SaveChanges();
+		IEnumerable<ActiveCompanyReadDto> GetAllActive();
 	}
 }

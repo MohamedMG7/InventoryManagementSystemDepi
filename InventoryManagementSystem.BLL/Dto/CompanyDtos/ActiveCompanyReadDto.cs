@@ -1,9 +1,9 @@
 ﻿
-
 namespace InventoryManagementSystem.BLL.Dto.CompanyDtos
 {
-	public class CompanyAddDto
+	public class ActiveCompanyReadDto
 	{
+		public int CompanyId { get; set; }
 		public string Name { get; set; }
 		public string State { get; set; }
 		public string City { get; set; }

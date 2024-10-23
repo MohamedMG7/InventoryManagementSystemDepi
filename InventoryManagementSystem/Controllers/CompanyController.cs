@@ -1,5 +1,6 @@
 ﻿using InventoryManagementSystem.BLL.Dto.CompanyDtos;
 using InventoryManagementSystem.BLL.Manager.CompanyManager;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace InventoryManagementSystem.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
+	[Authorize(Roles = "Admin")]
 	public class CompanyController : ControllerBase
 	{
 		private readonly ICompanyManager _companyManager;
@@ -15,8 +17,14 @@ namespace InventoryManagementSystem.Controllers
 			_companyManager = companyManager;
 		}
 
-		[HttpGet]
-		public ActionResult<IEnumerable<CompanyReadDto>> GetAll()
+		[HttpGet("Active")]
+		public ActionResult<IEnumerable<ActiveCompanyReadDto>> GetAll()
+		{
+			return Ok(_companyManager.GetAllActive());
+		}
+
+		[HttpGet()]
+		public ActionResult<IEnumerable<CompanyReadDto>> GetAllActive()
 		{
 			return Ok(_companyManager.GetAll());
 		}

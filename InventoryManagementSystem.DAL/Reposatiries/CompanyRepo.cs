@@ -30,6 +30,11 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 			return _context.Company.AsNoTracking().ToList();
 		}
 
+		public IEnumerable<Company> GetAllActive()
+		{
+			return _context.Company.AsNoTracking().Where(sc => !sc.isDeleted).ToList();
+		}
+
 		public Company GetbyID(int id)
 		{
 			return _context.Company.Find(id);

@@ -10,5 +10,6 @@ namespace InventoryManagementSystem.DAL.Reposatiries
 		void Update(Company Company);
 		void Add(Company Company);
 		void SaveChanges();
+		IEnumerable<Company> GetAllActive();
 	}
 }

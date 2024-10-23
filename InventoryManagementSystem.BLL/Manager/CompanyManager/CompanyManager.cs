@@ -37,6 +37,21 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 			
 		}
 
+		public IEnumerable<ActiveCompanyReadDto> GetAllActive()
+		{
+			var companies = _companyRepo.GetAllActive();
+			var companiesList = companies.Select(x => new ActiveCompanyReadDto
+			{
+				CompanyId = x.CompanyId,
+				Name = x.Name,
+				State = x.State,
+				City = x.City,
+				Street = x.Street,
+				PhoneNumber = x.PhoneNumber
+			});
+			return companiesList;
+		}
+
 		public IEnumerable<CompanyReadDto> GetAll()
 		{
 			var companies = _companyRepo.GetAll();
@@ -47,7 +62,8 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 				State = x.State,
 				City = x.City,
 				Street = x.Street,
-				PhoneNumber = x.PhoneNumber
+				PhoneNumber = x.PhoneNumber,
+				isDeleted = x.isDeleted,
 			});
 			return companiesList;
 		}
@@ -62,7 +78,8 @@ namespace InventoryManagementSystem.BLL.Manager.CompanyManager
 				State = companyModel.State,
 				City = companyModel.City,
 				Street = companyModel.Street,
-				PhoneNumber = companyModel.PhoneNumber
+				PhoneNumber = companyModel.PhoneNumber,
+				isDeleted = companyModel.isDeleted,
 			};
 
 			return companyReadDto;
