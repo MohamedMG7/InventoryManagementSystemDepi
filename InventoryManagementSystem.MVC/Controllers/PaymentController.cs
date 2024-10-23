@@ -1,10 +1,12 @@
 ﻿using InventoryManagementSystem.BLL.Dto.PaymentDtos;
 using InventoryManagementSystem.BLL.Manager.PaymentManager;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 
 namespace InventoryManagementSystem.Controllers
 {
+    [Route("payment")]
     public class PaymentController : Controller
     {
         private readonly IPaymentManager _paymentManager;
@@ -15,6 +17,7 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         public IActionResult Index()
         {
             var payments = _paymentManager.GetAll();
@@ -34,12 +37,24 @@ namespace InventoryManagementSystem.Controllers
         }
 
         [HttpGet]
+        [Route("Create")]
+
         public IActionResult Create()
         {
+           
+            ViewBag.PaymentTypes = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "Visa", Value = "Visa" },
+        new SelectListItem { Text = "Cash", Value = "Cash" }
+    };
+
             return View();
         }
 
+
+
         [HttpPost]
+        [Route("Create")]
         public IActionResult Create(PaymentAddDto paymentAddDto)
         {
             if (ModelState.IsValid)
@@ -57,5 +72,11 @@ namespace InventoryManagementSystem.Controllers
             _paymentManager.Delete(id);
             return RedirectToAction("Index");
         }
+        
+        public IActionResult PaymentSuccess()
+        {
+            return View();
+        }
+
     }
 }
