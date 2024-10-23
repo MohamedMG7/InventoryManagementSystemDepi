@@ -28,99 +28,56 @@ namespace InventoryManagementSystem.BLL.Manager.AccountManager
 			_shoppingCartRepo = shoppingCartRepo;
         }
 
-        //public async Task<string> LoginUser(UserLoginDto loginDto) // we will return a string (Token) To The User
-        //{
-        //    var userModel = await _userManager.FindByNameAsync(loginDto.Email);
-        //    var userRoles = await _userManager.GetRolesAsync(userModel);
-        //    string userRole = userRoles.FirstOrDefault();
+        public async Task<string> LoginUser(UserLoginDto loginDto) // we will return a string (Token) To The User
+        {
+            var userModel = await _userManager.FindByNameAsync(loginDto.Email);
+            var userRoles = await _userManager.GetRolesAsync(userModel);
+            string userRole = userRoles.FirstOrDefault();
 
-        //    if (userModel != null)
-        //    {
-        //        bool isPasswordValid = await _userManager.CheckPasswordAsync(userModel, loginDto.Password);
-        //        if (isPasswordValid)
-        //        {
-        //            List<Claim> claims = new List<Claim>()
-        //            {
-        //                new Claim(JwtRegisteredClaimNames.Sub, userModel.Id.ToString()),
-        //                new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
-        //                new Claim(ClaimTypes.Name, userModel.Name),
-        //                new Claim(ClaimTypes.Role, userRole),
-        //            };
-        //            return GenerateToken(claims, true);
-        //        }
-        //    }
+            if (userModel != null)
+            {
+                bool isPasswordValid = await _userManager.CheckPasswordAsync(userModel, loginDto.Password);
+                if (isPasswordValid)
+                {
+                    List<Claim> claims = new List<Claim>()
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, userModel.Id.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Email, userModel.Email),
+                        new Claim(ClaimTypes.Name, userModel.Name),
+                        new Claim(ClaimTypes.Role, userRole),
+                    };
+                    return GenerateToken(claims, true);
+                }
+            }
 
-        //    return "Invalid Email Or Password";
-        //}
+            return "Invalid Email Or Password";
+        }
 
+        //creating JWT
+        private string GenerateToken(IList<Claim> claims, bool RememberMe)
+        {
+            var SecretKeyString = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
+            var SecretKeyByte = Encoding.ASCII.GetBytes(SecretKeyString);
+            SecurityKey securityKey = new SymmetricSecurityKey(SecretKeyByte);
 
-        //public async Task<IdentityResult> RegisterUser(UserRegisterDto registerDto)
-        //{
-        //    var user = new User
-        //    {
-        //        UserName = registerDto.Email,
-        //        Email = registerDto.Email,
-        //        Name = registerDto.Name,
-        //        PhoneNumber = registerDto.PhoneNumber,
-        //        State = registerDto.State,
-        //        City = registerDto.City,
-        //        Street = registerDto.Street,
-        //        UserType = registerDto.UserType
-        //    };
+            //Combind SecretKey , HasingAlgorithm (SigningCredentials)
+            SigningCredentials signingCredential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            DateTime tokenExpiration = RememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(2);
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
+            (
+                claims: claims,
+                issuer: issuer,
+                audience: audience,
+                signingCredentials: signingCredential,
+                expires: tokenExpiration
+            );
 
-
-        //    // Create the user with the password
-        //    var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-        //    if (result.Succeeded)
-        //    {
-        //        // Assign Role
-        //        if (await _roleManager.RoleExistsAsync(registerDto.UserType))
-        //        {
-        //            await _userManager.AddToRoleAsync(user, registerDto.UserType);
-        //        }
-        //        else
-        //        {
-        //            // Handle the case where the role doesn't exist
-        //            return IdentityResult.Failed(new IdentityError
-        //            {
-        //                Description = $"Role '{registerDto.UserType}' does not exist."
-        //            });
-        //        }
-        //    }
-        //    return result; // Return the IdentityResult
-        //}
-
-        //public async Task LogoutUser()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //}
-
-        ////creating JWT
-        //private string GenerateToken(IList<Claim> claims, bool RememberMe)
-        //{
-        //    var SecretKeyString = _configuration["Jwt:Key"];
-        //    var issuer = _configuration["Jwt:Issuer"];
-        //    var audience = _configuration["Jwt:Audience"];
-        //    var SecretKeyByte = Encoding.ASCII.GetBytes(SecretKeyString);
-        //    SecurityKey securityKey = new SymmetricSecurityKey(SecretKeyByte);
-
-        //    //Combind SecretKey , HasingAlgorithm (SigningCredentials)
-        //    SigningCredentials signingCredential = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        //    DateTime tokenExpiration = RememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(2);
-        //    JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
-        //    (
-        //        claims: claims,
-        //        issuer: issuer,
-        //        audience: audience,
-        //        signingCredentials: signingCredential,
-        //        expires: tokenExpiration
-        //    );
-
-        //    JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-        //    string token = handler.WriteToken(jwtSecurityToken);
-        //    return token;
-        //}
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            string token = handler.WriteToken(jwtSecurityToken);
+            return token;
+        }
 
         public async Task<string> LoginUser(UserLoginDto loginDto, bool rememberMe)
         {
