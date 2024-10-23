@@ -57,10 +57,12 @@ namespace InventoryManagementSystem.Controllers
         [Route("Create")]
         public IActionResult Create(PaymentAddDto paymentAddDto)
         {
+           // adding orderid
+           // paymentAddDto.OrderId = 1;
             if (ModelState.IsValid)
             {
                 _paymentManager.Add(paymentAddDto);
-                return RedirectToAction("Index");
+                return RedirectToAction("PaymentSucces");
             }
             return View(paymentAddDto);
         }
@@ -72,7 +74,8 @@ namespace InventoryManagementSystem.Controllers
             _paymentManager.Delete(id);
             return RedirectToAction("Index");
         }
-        
+        [HttpGet]
+        [Route("PaymentSuccess")]
         public IActionResult PaymentSuccess()
         {
             return View();
