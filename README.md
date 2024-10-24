@@ -28,15 +28,7 @@ By offering these integrated features, the system will help businesses optimize 
 
 ## Database Design
 
-The system's database has been carefully designed to handle product management, user authentication, orders, and inventory tracking. Below is an overview of the database structure.
-
-### Entity Relationship Diagram (ERD)
-
-![Database ERD](path/to/your/database-diagram.png)
-
-> **Note**: Replace the `path/to/your/database-diagram.png` with the correct path to the ERD image.
-
----
+The system's database has been carefully designed to handle product management, user authentication, orders, and inventory tracking.
 
 ## Technologies Used
 
